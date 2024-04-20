@@ -1,7 +1,15 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 // @mui
-import { Typography, IconButton, MenuItem, TableCell, TableRow } from '@mui/material';
+import {
+  Avatar,
+  IconButton,
+  MenuItem,
+  Stack,
+  TableCell,
+  TableRow,
+  Typography,
+} from '@mui/material';
 // components
 import ConfirmDialog from '@components/confirm-dialog';
 import Iconify from '@components/iconify';
@@ -9,11 +17,12 @@ import Label from '@components/label';
 import MenuPopover from '@components/menu-popover';
 import { useSelector } from 'react-redux';
 import { LoadingButton } from '@mui/lab';
+import Tooltip from '@mui/material/Tooltip';
 import moment from 'moment/moment';
 
 // ----------------------------------------------------------------------
 
-UserTableRow.propTypes = {
+StaffTableRow.propTypes = {
   row: PropTypes.object,
   selected: PropTypes.bool,
   onEditRow: PropTypes.func,
@@ -25,22 +34,23 @@ UserTableRow.propTypes = {
   modulePermit: PropTypes.object,
 };
 
-export default function UserTableRow({
+export default function StaffTableRow({
   row,
-  index,
-  query,
   selected,
   onEditRow,
   onViewRow,
   onSelectRow,
   onDeleteRow,
+  index,
+  query,
   modulePermit,
 }) {
-  const { isDeleting } = useSelector((store) => store?.users);
+  const { firstName, lastName, avatar, phoneNumber, email, role } = row;
 
-  const { name, mobile, pincode, email, expiredplanDate, paymentStatus, planTitle, patientId } =
-    row;
   const { page, limit } = query;
+
+  const { isDeleting } = useSelector((store) => store?.staff);
+
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [openPopover, setOpenPopover] = useState(null);
@@ -61,6 +71,8 @@ export default function UserTableRow({
     setOpenPopover(null);
   };
 
+  console.log('lastLogin');
+
   return (
     <>
       <TableRow hover selected={selected}>
@@ -74,69 +86,38 @@ export default function UserTableRow({
             {(page - 1) * limit + (index + 1)}
           </Typography>
         </TableCell>
-
-        <TableCell sx={{ textTransform: 'capitalize' }}>
-          {patientId ? (
-            <Typography variant="subtitle2">{patientId}</Typography>
-          ) : (
-            <Typography variant="subtitle2">N/A</Typography>
-          )}
-        </TableCell>
-
-        <TableCell sx={{ textTransform: 'capitalize' }}>
-          {name ? (
-            <Typography variant="subtitle2">{name}</Typography>
-          ) : (
-            <Typography variant="subtitle2">N/A</Typography>
-          )}
-        </TableCell>
-
         <TableCell>
-          {mobile ? (
-            <Typography variant="subtitle2">{mobile}</Typography>
-          ) : (
-            <Typography variant="subtitle2">N/A</Typography>
-          )}
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <Avatar alt={firstName} src={avatar} />
+
+            <Typography variant="subtitle2" noWrap>
+              {`${firstName} ${lastName}`}
+            </Typography>
+          </Stack>
         </TableCell>
+
+        <TableCell align="left">
+          <Typography variant="subtitle2">{phoneNumber}</Typography>
+        </TableCell>
+
         <TableCell align="left">
           <Label variant="soft" sx={{ textTransform: 'none' }}>
-            {email ? (
-              <Typography variant="subtitle2">{email}</Typography>
-            ) : (
-              <Typography variant="subtitle2">N/A</Typography>
-            )}
+            <Typography variant="subtitle2">{email}</Typography>
           </Label>
         </TableCell>
-        <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-          {pincode ? (
-            <Typography variant="subtitle2">{pincode}</Typography>
-          ) : (
-            <Typography variant="subtitle2">N/A</Typography>
-          )}
-        </TableCell>
-        <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-          {planTitle ? <Typography variant="subtitle2">{planTitle}</Typography> : 'N/A'}
-        </TableCell>
-        <TableCell align="left">
+
+        {/* <TableCell align="left">
           <Typography variant="subtitle2">
-            {expiredplanDate ? (
-              moment(expiredplanDate)?.format('DD MMM YYYY')
-            ) : (
-              <Typography variant="subtitle2">N/A</Typography>
-            )}
+            {lastLogin
+              ? moment.utc(lastLogin).format('DD MMM YYYY hh:mm a')
+              : 'N/A'}
           </Typography>
-        </TableCell>
-        <TableCell align="left">
-          <Label
-            variant="soft"
-            color={paymentStatus === 'paid' ? 'success' : 'warning'}
-            sx={{ textTransform: 'capitalize' }}
-          >
-            <Typography variant="subtitle2">
-              {' '}
-              {paymentStatus === 'paid' ? 'Paid' : 'Unpaid'}
-            </Typography>
-          </Label>
+        </TableCell> */}
+
+        <TableCell sx={{ textTransform: 'capitalize' }}>
+          
+            <Typography variant="subtitle2">{role}</Typography>
+          
         </TableCell>
       </TableRow>
 
@@ -156,15 +137,16 @@ export default function UserTableRow({
           View
         </MenuItem>
 
-        {/* <MenuItem
+        <MenuItem
           onClick={() => {
             onEditRow();
             handleClosePopover();
           }}
+          // disabled={!modulePermit.edit}
         >
           <Iconify icon="eva:edit-fill" />
           Edit
-        </MenuItem> */}
+        </MenuItem>
 
         <MenuItem
           onClick={() => {
@@ -172,7 +154,7 @@ export default function UserTableRow({
             handleClosePopover();
           }}
           sx={{ color: 'error.main' }}
-          disabled={!modulePermit.delete}
+          // disabled={!modulePermit.delete || role?.roleName.toLowerCase() === 'super admin'}
         >
           <Iconify icon="eva:trash-2-outline" />
           Delete

@@ -1,32 +1,35 @@
 import Iconify from '@components/iconify';
 import { Button, InputAdornment, TextField, Grid, Box, Autocomplete } from '@mui/material';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
-UserTableToolbar.propTypes = {
+StaffTableToolbar.propTypes = {
   filterSearch: PropTypes.string,
   onFilterName: PropTypes.func,
   onResetFilter: PropTypes.func,
   onFilterSearch: PropTypes.func,
-  statusData: PropTypes.array,
-  status: PropTypes.object,
-  onStatusChange: PropTypes.func,
+  roleData: PropTypes.array,
+  role: PropTypes.object,
+  onRoleChange: PropTypes.func,
 };
 
-export default function UserTableToolbar({
+export default function StaffTableToolbar({
   filterSearch,
   onFilterName,
   onResetFilter,
   onFilterSearch,
-  statusData,
-  status,
-  onStatusChange,
+  roleData,
+
+  role,
+  onRoleChange,
 }) {
-  const handleStatusChange = (event, value) => {
-    onStatusChange(value);
+  const handleRoleChange = (event, value) => {
+    onRoleChange(value);
   };
+
   const handleResetFilter = () => {
     onResetFilter();
-    onStatusChange(null);
+    onRoleChange(null);
   };
 
   return (
@@ -53,16 +56,17 @@ export default function UserTableToolbar({
             }}
           />
         </Grid>
-
         <Grid item xs={12} sm={3}>
           <Autocomplete
-            options={statusData}
-            value={status}
-            onChange={handleStatusChange}
-            getOptionLabel={(option) => option}
-            renderInput={(params) => (
-              <TextField {...params} label="Status" size="medium" fullWidth />
-            )}
+            options={roleData}
+            value={role}
+            onChange={handleRoleChange}
+            getOptionLabel={(option) =>
+                    option && option.roleName
+                      ? option.roleName.replace(/\b\w/g, (char) => char.toUpperCase())
+                      : ''
+                  }
+            renderInput={(params) => <TextField {...params} label="Role" size="medium" fullWidth />}
           />
         </Grid>
 

@@ -21,12 +21,12 @@ export const PATH_DASHBOARD = {
   dashboard: {
     root: path(ROOTS_DASHBOARD, '/dashboard'),
   },
-  user: {
-    root: path(ROOTS_DASHBOARD, '/user/list'),
-    list: path(ROOTS_DASHBOARD, '/user/list'),
-    new: path(ROOTS_DASHBOARD, '/user/new'),
-    edit: (id) => path(ROOTS_DASHBOARD, `/user/${id}/edit`),
-    view: (id) => path(ROOTS_DASHBOARD, `/user/${id}/view`),
+  student: {
+    root: path(ROOTS_DASHBOARD, '/student/list'),
+    list: path(ROOTS_DASHBOARD, '/student/list'),
+    new: path(ROOTS_DASHBOARD, '/student/new'),
+    edit: (id) => path(ROOTS_DASHBOARD, `/student/${id}/edit`),
+    view: (id) => path(ROOTS_DASHBOARD, `/student/${id}/view`),
   },
   staff: {
     root: path(ROOTS_DASHBOARD, '/staff/list'),

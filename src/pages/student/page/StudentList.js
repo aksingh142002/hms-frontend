@@ -1,8 +1,10 @@
-import { Card, Container, Divider, Table, TableBody, TableContainer } from '@mui/material';
+import { Button, Card, Container, Divider, Table, TableBody, TableContainer } from '@mui/material';
 import { PATH_DASHBOARD } from '@routes/paths';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import CustomBreadcrumbs from '@components/custom-breadcrumbs';
+import Iconify from '@components/iconify';
 import Scrollbar from '@components/scrollbar';
 import { useSettingsContext } from '@components/settings';
 import { useSnackbar } from '@components/snackbar';
@@ -14,68 +16,60 @@ import {
   getComparator,
   TableSkeleton,
 } from '@components/table';
-
-import { deleteUserAsync, getUsersAsync } from '@redux/services';
+import { deleteStaffAsync, getRoleListAsync, getStaffListAsync } from '@redux/services';
 import { useDispatch, useSelector } from 'react-redux';
-
-import { useNavigate, useLocation } from 'react-router';
-import { UserTableRow, UserTableToolbar } from '../components';
+import { StaffTableRow, StaffTableToolbar } from '../components';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'action', label: 'Action', align: 'left' },
   { id: 'Sr. No', label: 'Sr. No', align: 'left' },
-  { id: 'patientId', label: 'Patient Id', align: 'left' },
   { id: 'name', label: 'Name', align: 'left' },
-  { id: 'Phone', label: 'Phone', align: 'left' },
-  { id: 'email', label: 'Email', align: 'left' },
-  { id: 'pinCode', label: 'Pincode', align: 'left' },
-  { id: 'PlanTitle', label: 'Plan', align: 'center' },
-  { id: 'expiryDate', label: 'Expiry Date', align: 'left' },
-  { id: 'paymentStatus', label: 'Payment Status', align: 'left' },
+  { id: 'Mobile', label: 'Mobile Number', align: 'left' },
+  { id: 'Email', label: 'Email', align: 'left' },
+
+  { id: 'Role', label: 'Role', align: 'left' },
 ];
 
 const limit = localStorage.getItem('table-rows-per-page') ?? 10;
+const DEFAULT_QUERY = { page: 1, limit: Number(limit) };
 
-const statusData = ['Paid', 'Unpaid'];
-
-export default function UserListPage() {
+export default function StaffList() {
   const {
     dense,
     order,
-    page,
-    setPage,
     orderBy,
     selected,
-    setSelected,
     onSelectRow,
     onSort,
+    page,
+    setPage,
     rowsPerPage,
     onChangeDense,
     onChangeRowsPerPage,
   } = useTable();
 
   const { themeStretch } = useSettingsContext();
-
   const { enqueueSnackbar } = useSnackbar();
 
   const navigate = useNavigate();
-  const location = useLocation();
-  const DEFAULT_QUERY = { page: 1, limit: Number(limit), status: location?.state?.data ?? null };
 
-  const { totalCount, users, isLoading } = useSelector((store) => store?.users);
+  const { isLoading, staffData, totalCount } = useSelector((store) => store?.staff);
   const { modulePermit } = useSelector((store) => store?.menupermission);
-
+  // const { allRoleData } = useSelector((store) => store?.role);
+  const allRoleData = [
+    { _id: 1, roleName: 'hostel staff' },
+    { _id: 2, roleName: 'admin' },
+  ];
   const dispatch = useDispatch();
+  const [openConfirm, setOpenConfirm] = useState(false);
+
+  const [search, setSearch] = useState('');
+  const [role, setRole] = useState(null);
 
   const [query, setQuery] = useState(DEFAULT_QUERY);
 
   const denseHeight = dense ? 52 : 72;
-  const [openConfirm, setOpenConfirm] = useState(false);
-
-  const [search, setSearch] = useState('');
-  const [status, setStatus] = useState(location?.state?.data ?? null);
-
   const handleOpenConfirm = () => {
     setOpenConfirm(true);
   };
@@ -88,36 +82,37 @@ export default function UserListPage() {
     setPage(0);
     setSearch(event.target.value);
   };
+
   const handleFilterSearch = () => {
-    if (search || status) {
-      const updatedQuery = { ...query, page: 1, search, status };
+    if (search || role) {
+      const updatedQuery = { ...query, page: 1, search, role: role?.roleName };
       setQuery(updatedQuery);
     }
   };
   const handleResetFilter = () => {
-    if (search || status) {
+    if (search || role) {
       setSearch('');
-      const updatedQuery = { ...query, page: 1, search: '', status: null };
+      const updatedQuery = { ...query, page: 1, search: '', role: '' };
       setQuery(updatedQuery);
     }
   };
-
   const handleDeleteRow = async (row, closeModal) => {
-    // API call to delete row.
-    const response = await dispatch(deleteUserAsync(row?._id));
+    const response = await dispatch(deleteStaffAsync(row?._id));
+
     if (response?.payload?.success) {
-      if (users?.length === 1 && query?.page > 1) {
+      if (staffData?.length === 1 && query?.page > 1) {
         setQuery((p) => {
           p.page -= 1;
           return { ...p };
         });
       } else {
-        dispatch(getUsersAsync(query));
+        dispatch(getStaffListAsync(query));
       }
       closeModal();
-      enqueueSnackbar('Delete success!');
+      enqueueSnackbar(response?.payload?.message);
     }
   };
+
   const handleRowsPerPageChange = (event) => {
     const { value } = event.target;
     DEFAULT_QUERY.limit = parseInt(value, 10);
@@ -130,11 +125,11 @@ export default function UserListPage() {
   };
 
   const handleEditRow = (row) => {
-    navigate(PATH_DASHBOARD.user.edit(row?._id), { state: row });
+    navigate(PATH_DASHBOARD.staff.edit(row?._id), { state: row });
   };
 
   const handleViewRow = (row) => {
-    navigate(PATH_DASHBOARD.user.view(row?._id), { state: row });
+    navigate(PATH_DASHBOARD.staff.view(row?._id), { state: row });
   };
 
   const handlePageChange = (event, newPage) => {
@@ -143,36 +138,48 @@ export default function UserListPage() {
       return { ...p };
     });
   };
-
+  // useEffect(() => {
+  //   dispatch(getRoleListAsync());
+  // }, [dispatch]);
   useEffect(() => {
-    dispatch(getUsersAsync(query));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    dispatch(getStaffListAsync(query));
   }, [dispatch, query]);
 
   return (
     <>
       <Helmet>
-        <title> User: List | OPJU Hostel </title>
+        <title> Staff: List | OPJU Hostel </title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="User List"
+          heading="Staff List"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'User', href: PATH_DASHBOARD.user.list },
+            { name: 'Staff', href: PATH_DASHBOARD.staff.list },
             { name: 'List' },
           ]}
+          action={
+            <Button
+              component={RouterLink}
+              to={PATH_DASHBOARD.staff.new}
+              variant="contained"
+              startIcon={<Iconify icon="eva:plus-fill" />}
+              // disabled={!modulePermit.create}
+            >
+              New Staff
+            </Button>
+          }
         />
 
         <Card>
           <Divider />
-          <UserTableToolbar
+          <StaffTableToolbar
             filterSearch={search}
             onFilterSearch={handleFilterSearch}
-            statusData={statusData}
-            status={status}
-            onStatusChange={setStatus}
+            roleData={allRoleData}
+            role={role}
+            onRoleChange={setRole}
             onFilterName={handleFilterName}
             onResetFilter={handleResetFilter}
           />
@@ -183,18 +190,17 @@ export default function UserListPage() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={users?.length}
+                  rowCount={staffData?.length}
                   numSelected={selected.length}
-                  // onSort={onSort}
                 />
 
                 <TableBody>
                   {isLoading ||
-                    users.map((row, index) => (
-                      <UserTableRow
+                    staffData.map((row, index) => (
+                      <StaffTableRow
                         key={row._id}
-                        index={index}
                         row={row}
+                        index={index}
                         query={query}
                         selected={selected.includes(row?._id)}
                         onSelectRow={() => onSelectRow(row?._id)}
@@ -205,7 +211,7 @@ export default function UserListPage() {
                       />
                     ))}
 
-                  <TableNoData isNotFound={users?.length} isLoading={isLoading} />
+                  <TableNoData isNotFound={staffData?.length} isLoading={isLoading} />
                 </TableBody>
               </Table>
             </Scrollbar>

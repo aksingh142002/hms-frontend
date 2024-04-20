@@ -2,7 +2,7 @@ export * from './usersService';
 export * from './loginservice';
 export * from './staffService';
 export * from './roleService';
-export * from './service';
+export * from './studentService';
 export * from './planService';
 export * from './dietPlanService';
 export * from './bloodReportService';

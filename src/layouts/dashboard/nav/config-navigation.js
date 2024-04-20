@@ -11,7 +11,7 @@ const icon = (name) => (
 
 const ICONS = {
   master: icon('master'),
-  user: icon('ic_user'),
+  student: icon('ic_user'),
   ecommerce: icon('ic_ecommerce'),
   analytics: icon('ic_analytics'),
   dashboard: icon('ic_dashboard'),
@@ -30,12 +30,12 @@ const navConfig = [
   {
     // subheader: 'General',
     items: [
-      // {
-      //   title: 'Dashboard',
-      //   // path: PATH_DASHBOARD.main,
-      //   icon: ICONS.dashboard,
-      //   // icon: ICONS.dashboard,
-      // },
+      {
+        title: 'Dashboard',
+        path: PATH_DASHBOARD.dashboard.root,
+        icon: ICONS.dashboard,
+        // icon: ICONS.dashboard,
+      },
    
       // {
       //   title: 'Masters',
@@ -58,9 +58,9 @@ const navConfig = [
         icon: ICONS.staff,
       },
       {
-        title: 'User',
-        path: PATH_DASHBOARD.user.root,
-        icon: ICONS.user,
+        title: 'Student',
+        path: PATH_DASHBOARD.student.root,
+        icon: ICONS.student,
       },
       // {
       //   title: 'Service',

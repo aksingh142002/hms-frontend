@@ -17,8 +17,8 @@ export const ResetPasswordPage = Loadable(
 );
 // DASHBOARD
 export const DashboardPage = Loadable(lazy(() => import('@pages/Dashboard/pages/DashboardPage')));
-export const User = Loadable(lazy(() => import('@pages/users/pages/User')));
-export const UserList = Loadable(lazy(() => import('@pages/users/pages/UserList')));
+export const Student = Loadable(lazy(() => import('@pages/student/page/Student')));
+export const StudentList = Loadable(lazy(() => import('@pages/student/page/StudentList')));
 export const StaffList = Loadable(lazy(() => import('@pages/Staff/page/StaffList')));
 export const Staff = Loadable(lazy(() => import('@pages/Staff/page/Staff')));
 // export const PackageList = Loadable(lazy(() => import('@pages/Package/pages/PackageList')));

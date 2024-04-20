@@ -1,53 +1,53 @@
 import CustomBreadcrumbs from '@components/custom-breadcrumbs';
 import { useSettingsContext } from '@components/settings';
-import { Container, Typography } from '@mui/material';
+import { Container } from '@mui/material';
 import { PATH_DASHBOARD } from '@routes/paths';
 import { useEffect, useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocation, useParams } from 'react-router';
-import { getUserByIdAsync } from '@redux/services';
+import { getStudentByIdAsync } from '@redux/services';
 import { useDispatch, useSelector } from 'react-redux';
-import { UserView, PrakritiSection, AssessmentSection } from '../components';
+import { StudentForm } from '../components';
 
-export default function UserCreatePage() {
+export default function StudentCreatePage() {
   const { themeStretch } = useSettingsContext();
   const dispatch = useDispatch();
+  const { studentById } = useSelector((state) => state?.student);
   const { id } = useParams();
-  const { userById } = useSelector((store) => store?.users);
   const { pathname = '', state } = useLocation();
-
+  console.log('state', state)
   const editView = useMemo(() => {
     if (id && /edit/i?.test(pathname)) {
       return {
-        title: 'User : Edit | OPJU Hostel',
-        heading: 'Edit User',
-        user: state?.name ?? '',
+        title: 'Student: Edit | OPJU Hostel',
+        heading: 'Edit Student',
+        user: 'Edit',
         isEdit: true,
         isView: false,
       };
     }
     if (id && /view/i?.test(pathname)) {
       return {
-        title: 'User : View | OPJU Hostel',
-        heading: 'View User',
-        user: state?.name ?? '',
+        title: 'Student: View | OPJU Hostel',
+        heading: 'View Student',
+        user: 'View',
         isEdit: false,
         isView: true,
       };
     }
     return {
-      title: 'User : View | OPJU Hostel',
-      heading: 'View User',
-      user: 'View',
+      title: 'Student: Create | OPJU Hostel',
+      heading: 'Create Student',
+      user: 'New',
       isEdit: false,
       isView: false,
     };
-  }, [pathname, id, state]);
+  }, [pathname, id]);
 
-  // useEffect(()=>{
-  //   if(id) dispatch(getUserByIdAsync({id}))
-  //    // eslint-disable-next-line
-  // },[])
+  // useEffect(() => {
+  //   if (id) dispatch(getstudentByIdAsync({ id }));
+  //   // eslint-disable-next-line
+  // }, []);
 
   return (
     <>
@@ -64,25 +64,20 @@ export default function UserCreatePage() {
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'User',
-              href: PATH_DASHBOARD.user.list,
+              name: 'Student',
+              href: PATH_DASHBOARD.student.list,
             },
-            { name: state?.name },
+            {
+              name: editView?.user,
+              href: PATH_DASHBOARD.student.list,
+            },
           ]}
         />
-        <Typography variant="h4" sx={{ padding: '10px 0 20px 0' }}>
-          Basic Details
-        </Typography>
-        <UserView id={id} />
-
-        <Typography variant="h4" sx={{ padding: '10px 0 20px 0' }}>
-          Body Type
-        </Typography>
-        <PrakritiSection id={id} />
-        <Typography variant="h4" sx={{ padding: '10px 0 20px 0' }}>
-          Self Analysis
-        </Typography>
-        <AssessmentSection id={id} />
+        <StudentForm
+          isEdit={editView?.isEdit}
+          isView={editView?.isView}
+          currentStudent={editView?.isEdit || editView?.isView ? state : {}}
+        />
       </Container>
     </>
   );
