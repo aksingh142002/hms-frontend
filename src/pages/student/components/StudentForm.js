@@ -82,7 +82,7 @@ export default function StudentForm({ isEdit = false, isView = false, currentStu
       .required('Email is required.')
       .email('Email must be a valid email address.'),
     password: !isEdit ? Yup.string().required('Password is required.') : '',
-    role: Yup.mixed().required('Role is required.'),
+    role: Yup.string().required('Role is required.'),
   });
 
   const defaultValues = useMemo(

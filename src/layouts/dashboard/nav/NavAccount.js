@@ -22,12 +22,12 @@ const StyledRoot = styled('div')(({ theme }) => ({
 export default function NavAccount() {
   const { user } = useAuthContext();
   const role = JSON.parse(localStorage.getItem('userData'))
-
+  console.log('role', role)
   return (
     <StyledRoot>
       {/* <CustomAvatar src={user?.photoURL} alt={user?.displayName} name={user?.displayName} /> */}
       <Avatar
-            src={role?.image}
+            src={role?.avatar}
             alt=""
             width={45}
             height={45}
@@ -37,11 +37,11 @@ export default function NavAccount() {
       <Box sx={{ ml: 2, minWidth: 0 }}>
         <Typography variant="subtitle2" noWrap>
           {/* {user?.displayName} */}
-          {role?.role?.roleName}
+          {`${role?.firstName} ${role?.lastName}`}
         </Typography>
 
         <Typography variant="body2" noWrap sx={{ color: 'text.secondary' }}>
-          {user?.role}
+          {role?.role}
         </Typography>
       </Box>
     </StyledRoot>

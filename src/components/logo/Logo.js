@@ -21,8 +21,8 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
   const logo = (
     <Box
       component="img"
-      src="/logo/V4Health.svg"
-      sx={{ width: 80, height: 80, cursor: 'pointer', ...sx }}
+      src="/logo/clg_logo.png"
+      sx={{ width: 140, height: 'auto', cursor: 'pointer', ...sx }}
     />
   );
 
