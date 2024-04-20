@@ -11,8 +11,8 @@ const initialState = {
   isLoading: false,
   isSubmitting: false,
   isDeleting: false,
-  StudentData: [],
-  StudentById: {},
+  studentData: [],
+  studentById: {},
   totalCount: 0,
   allStudentByStudentId: [],
   assignedStudentByStudentId: [],
@@ -34,11 +34,11 @@ const StudentSlice = createSlice({
     builder.addMatcher(isAnyOf(getStudentListAsync.fulfilled), (state, { payload }) => {
       state.isLoading = false;
       state.totalCount = payload?.data?.totalItems;
-      state.StudentData = payload?.data?.data;
+      state.studentData = payload?.data?.studentList;
     });
     builder.addMatcher(isAnyOf(getStudentListAsync.rejected), (state, { payload }) => {
       state.isLoading = false;
-      state.StudentData = [];
+      state.studentData = [];
     });
     // -------------
 
@@ -48,11 +48,11 @@ const StudentSlice = createSlice({
     });
     builder.addMatcher(isAnyOf(getStudentByIdAsync.fulfilled), (state, { payload }) => {
       state.isLoading = false;
-      state.StudentById = payload?.data;
+      state.studentById = payload?.data;
     });
     builder.addMatcher(isAnyOf(getStudentByIdAsync.rejected), (state, { payload }) => {
       state.isLoading = false;
-      state.StudentById = {};
+      state.studentById = {};
     });
     // -------------
 

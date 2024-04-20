@@ -15,8 +15,8 @@ import {
 import {
   getRoleListAsync,
   getSymptomAsync,
-  postStaffCreateAsync,
-  updateStaffAsync,
+  postStudentCreateAsync,
+  updateStudentAsync,
 } from '@redux/services';
 import { PATH_DASHBOARD } from '@routes/paths';
 import { options } from 'numeral';
@@ -28,13 +28,13 @@ import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import UploadBox from '@components/upload/CustomUpload/UploadBox';
 
-StaffForm.propTypes = {
+StudentForm.propTypes = {
   isEdit: PropTypes.bool,
   isView: PropTypes.bool,
-  currentStaff: PropTypes.object,
+  currentStudent: PropTypes.object,
 };
 
-export default function StaffForm({ isEdit = false, isView = false, currentStaff }) {
+export default function StudentForm({ isEdit = false, isView = false, currentStudent }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
@@ -44,9 +44,9 @@ export default function StaffForm({ isEdit = false, isView = false, currentStaff
   };
   const allRoleData = ['hostel staff', 'admin'];
   // const { allRoleData } = useSelector((store) => store?.role);
-  const { isLoading } = useSelector((store) => store?.staff);
+  const { isLoading } = useSelector((store) => store?.student);
 
-  const StaffSchema = Yup.object().shape({
+  const StudentSchema = Yup.object().shape({
     firstName: Yup.string().required('First Name is required.'),
     lastName: Yup.string().required('Last Name is required.'),
     avatar: Yup.mixed().test('fileOrURL', 'Select a valid avatar (max 1MB)', (value) => {
@@ -87,17 +87,17 @@ export default function StaffForm({ isEdit = false, isView = false, currentStaff
 
   const defaultValues = useMemo(
     () => ({
-      firstName: currentStaff?.firstName,
-      lastName: currentStaff?.lastName,
-      avatar: currentStaff?.avatar || [],
-      role: currentStaff?.role || null,
-      phoneNumber: currentStaff?.phoneNumber || '',
-      email: currentStaff?.email || '',
+      firstName: currentStudent?.firstName,
+      lastName: currentStudent?.lastName,
+      avatar: currentStudent?.avatar || [],
+      role: currentStudent?.role || null,
+      phoneNumber: currentStudent?.phoneNumber || '',
+      email: currentStudent?.email || '',
     }),
-    [currentStaff]
+    [currentStudent]
   );
   const methods = useForm({
-    resolver: yupResolver(StaffSchema),
+    resolver: yupResolver(StudentSchema),
     defaultValues,
   });
 
@@ -121,12 +121,12 @@ export default function StaffForm({ isEdit = false, isView = false, currentStaff
   };
 
   useEffect(() => {
-    if ((isEdit && currentStaff) || (isView && currentStaff)) {
+    if ((isEdit && currentStudent) || (isView && currentStudent)) {
       reset(defaultValues);
-      setImageFiles(currentStaff?.avatar ? [{ preview: currentStaff.avatar }] : []);
+      setImageFiles(currentStudent?.avatar ? [{ preview: currentStudent.avatar }] : []);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEdit, isView, currentStaff]);
+  }, [isEdit, isView, currentStudent]);
 
   const [imageFiles, setImageFiles] = useState([]);
   const [imagePreview, setImagePreview] = useState(' ');
@@ -157,18 +157,18 @@ export default function StaffForm({ isEdit = false, isView = false, currentStaff
     formData.append('password', data.password);
     if (data.avatar && data.avatar[0] instanceof File) {
       formData.append('avatar', data.avatar[0]);
-    } else if (currentStaff?.avatar) {
+    } else if (currentStudent?.avatar) {
       formData.append('avatar', data.avatar);
     }
     try {
       const response = await dispatch(
         isEdit
-          ? updateStaffAsync({ id: currentStaff?._id, data: formData })
-          : postStaffCreateAsync(formData)
+          ? updateStudentAsync({ id: currentStudent?._id, data: formData })
+          : postStudentCreateAsync(formData)
       );
       if (response?.payload?.data?.success) {
-        enqueueSnackbar(isEdit ? 'Staff Update successfully!' : 'Staff Created successfully!');
-        navigate(PATH_DASHBOARD.staff.list);
+        enqueueSnackbar(isEdit ? 'Student Update successfully!' : 'Student Created successfully!');
+        navigate(PATH_DASHBOARD.student.list);
         reset();
       }
     } catch (error) {
@@ -182,12 +182,12 @@ export default function StaffForm({ isEdit = false, isView = false, currentStaff
   };
 
   useEffect(() => {
-    if (currentStaff?.avatar) {
-      setImageFiles([currentStaff.avatar]);
-      setValue('avatar', [currentStaff?.avatar]);
+    if (currentStudent?.avatar) {
+      setImageFiles([currentStudent.avatar]);
+      setValue('avatar', [currentStudent?.avatar]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentStaff]);
+  }, [currentStudent]);
 
   // useEffect(() => {
   //   dispatch(getRoleListAsync());
@@ -291,7 +291,7 @@ export default function StaffForm({ isEdit = false, isView = false, currentStaff
               ) : (
                 <Stack gap="10px" justifyContent="flex-end" flexDirection="row" sx={{ mt: 3 }}>
                   <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                    {!isEdit ? 'Create Staff' : 'Save Changes'}
+                    {!isEdit ? 'Create Student' : 'Save Changes'}
                   </LoadingButton>
 
                   {isEdit && (

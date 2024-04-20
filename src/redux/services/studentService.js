@@ -2,47 +2,47 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import AxiosClient from '@utils/axios';
 
 
-export const postServiceCreateAsync = createAsyncThunk('service/postServiceCreateAsync', async (data, toolkit) =>
+export const postStudentCreateAsync = createAsyncThunk('student/postStudentCreateAsync', async (data, toolkit) =>
   AxiosClient({
     toolkit,
-    url: '/service/create-service',
+    url: '/student/create-student',
     method: 'post',
     data,
   })
 );
 
 
-export const getServiceListAsync = createAsyncThunk('service/getServiceListAsync', async (params, toolkit) =>
+export const getStudentListAsync = createAsyncThunk('student/getStudentListAsync', async (params, toolkit) =>
   AxiosClient({
     toolkit,
-    url: '/service/list-service',
+    url: '/student/list-student',
     method: 'get',
     params,
   })
 );
 
-export const getServiceByIdAsync = createAsyncThunk('service/getServiceByIdAsync', async ({id}, toolkit) =>
+export const getStudentByIdAsync = createAsyncThunk('student/getStudentByIdAsync', async ({id}, toolkit) =>
   AxiosClient({
     toolkit,
-    url: `/service/get-service/${id}`,
+    url: `/student/get-student/${id}`,
     method: 'get',
   })
 );
 
 
-export const updateBloodServiceAsync = createAsyncThunk('service/updateBloodServiceAsync',async ({ id, data }, toolkit) =>
+export const updateStudentAsync = createAsyncThunk('student/updateStudentAsync',async ({ id, data }, toolkit) =>
       AxiosClient({
         toolkit,
-        url: `/service/update-bloodtest-service/${id}`,
+        url: `/student/update-student/${id}`,
         method: 'put',
         data,
       })
   );
 
-  export const deleteServiceAsync = createAsyncThunk('service/updateServiceAsync', async (id, toolkit) =>
+  export const deleteStudentAsync = createAsyncThunk('student/updateStudentAsync', async (id, toolkit) =>
   AxiosClient({
     toolkit,
-    url: `/service/delete-service/${id}`,
+    url: `/student/delete-student/${id}`,
     method: 'delete',
   })
 );

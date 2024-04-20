@@ -16,9 +16,9 @@ import {
   getComparator,
   TableSkeleton,
 } from '@components/table';
-import { deleteStaffAsync, getRoleListAsync, getStaffListAsync } from '@redux/services';
+import { deleteStudentAsync, getRoleListAsync, getStudentListAsync } from '@redux/services';
 import { useDispatch, useSelector } from 'react-redux';
-import { StaffTableRow, StaffTableToolbar } from '../components';
+import { StudentTableRow, StudentTableToolbar } from '../components';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -34,7 +34,7 @@ const TABLE_HEAD = [
 const limit = localStorage.getItem('table-rows-per-page') ?? 10;
 const DEFAULT_QUERY = { page: 1, limit: Number(limit) };
 
-export default function StaffList() {
+export default function StudentList() {
   const {
     dense,
     order,
@@ -54,7 +54,7 @@ export default function StaffList() {
 
   const navigate = useNavigate();
 
-  const { isLoading, staffData, totalCount } = useSelector((store) => store?.staff);
+  const { isLoading, studentData, totalCount } = useSelector((store) => store?.student);
   const { modulePermit } = useSelector((store) => store?.menupermission);
   // const { allRoleData } = useSelector((store) => store?.role);
   const allRoleData = [
@@ -97,16 +97,16 @@ export default function StaffList() {
     }
   };
   const handleDeleteRow = async (row, closeModal) => {
-    const response = await dispatch(deleteStaffAsync(row?._id));
+    const response = await dispatch(deleteStudentAsync(row?._id));
 
     if (response?.payload?.success) {
-      if (staffData?.length === 1 && query?.page > 1) {
+      if (studentData?.length === 1 && query?.page > 1) {
         setQuery((p) => {
           p.page -= 1;
           return { ...p };
         });
       } else {
-        dispatch(getStaffListAsync(query));
+        dispatch(getStudentListAsync(query));
       }
       closeModal();
       enqueueSnackbar(response?.payload?.message);
@@ -125,11 +125,11 @@ export default function StaffList() {
   };
 
   const handleEditRow = (row) => {
-    navigate(PATH_DASHBOARD.staff.edit(row?._id), { state: row });
+    navigate(PATH_DASHBOARD.student.edit(row?._id), { state: row });
   };
 
   const handleViewRow = (row) => {
-    navigate(PATH_DASHBOARD.staff.view(row?._id), { state: row });
+    navigate(PATH_DASHBOARD.student.view(row?._id), { state: row });
   };
 
   const handlePageChange = (event, newPage) => {
@@ -142,39 +142,39 @@ export default function StaffList() {
   //   dispatch(getRoleListAsync());
   // }, [dispatch]);
   useEffect(() => {
-    dispatch(getStaffListAsync(query));
+    dispatch(getStudentListAsync(query));
   }, [dispatch, query]);
 
   return (
     <>
       <Helmet>
-        <title> Staff: List | OPJU Hostel </title>
+        <title> Student: List | OPJU Hostel </title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Staff List"
+          heading="Student List"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Staff', href: PATH_DASHBOARD.staff.list },
+            { name: 'Student', href: PATH_DASHBOARD.student.list },
             { name: 'List' },
           ]}
           action={
             <Button
               component={RouterLink}
-              to={PATH_DASHBOARD.staff.new}
+              to={PATH_DASHBOARD.student.new}
               variant="contained"
               startIcon={<Iconify icon="eva:plus-fill" />}
               // disabled={!modulePermit.create}
             >
-              New Staff
+              New Student
             </Button>
           }
         />
 
         <Card>
           <Divider />
-          <StaffTableToolbar
+          <StudentTableToolbar
             filterSearch={search}
             onFilterSearch={handleFilterSearch}
             roleData={allRoleData}
@@ -190,14 +190,14 @@ export default function StaffList() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={staffData?.length}
+                  rowCount={studentData?.length}
                   numSelected={selected.length}
                 />
 
                 <TableBody>
                   {isLoading ||
-                    staffData.map((row, index) => (
-                      <StaffTableRow
+                    studentData.map((row, index) => (
+                      <StudentTableRow
                         key={row._id}
                         row={row}
                         index={index}
@@ -211,7 +211,7 @@ export default function StaffList() {
                       />
                     ))}
 
-                  <TableNoData isNotFound={staffData?.length} isLoading={isLoading} />
+                  <TableNoData isNotFound={studentData?.length} isLoading={isLoading} />
                 </TableBody>
               </Table>
             </Scrollbar>
