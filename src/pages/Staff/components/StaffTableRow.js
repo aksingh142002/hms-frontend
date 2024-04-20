@@ -45,7 +45,7 @@ export default function StaffTableRow({
   query,
   modulePermit,
 }) {
-  const { name, image, mobileNumber, email, role, lastLogin } = row;
+  const { firstName, lastName, avatar, phoneNumber, email, role } = row;
 
   const { page, limit } = query;
 
@@ -88,16 +88,16 @@ export default function StaffTableRow({
         </TableCell>
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar alt={name} src={image} />
+            <Avatar alt={firstName} src={avatar} />
 
             <Typography variant="subtitle2" noWrap>
-              {name}
+              {`${firstName} ${lastName}`}
             </Typography>
           </Stack>
         </TableCell>
 
         <TableCell align="left">
-          <Typography variant="subtitle2">{mobileNumber}</Typography>
+          <Typography variant="subtitle2">{phoneNumber}</Typography>
         </TableCell>
 
         <TableCell align="left">
@@ -106,24 +106,18 @@ export default function StaffTableRow({
           </Label>
         </TableCell>
 
-        <TableCell align="left">
+        {/* <TableCell align="left">
           <Typography variant="subtitle2">
             {lastLogin
               ? moment.utc(lastLogin).format('DD MMM YYYY hh:mm a')
               : 'N/A'}
           </Typography>
-        </TableCell>
+        </TableCell> */}
 
         <TableCell sx={{ textTransform: 'capitalize' }}>
-          {role?.roleName.length > 16 ? (
-            <Tooltip title={role?.roleName.replace(/\b\w/g, (char) => char.toUpperCase())} arrow>
-              <Typography variant="subtitle2" noWrap sx={{ maxWidth: '200px' }}>
-                {role?.roleName.substring(0, 16)}...
-              </Typography>
-            </Tooltip>
-          ) : (
-            <Typography variant="subtitle2">{role?.roleName}</Typography>
-          )}
+          
+            <Typography variant="subtitle2">{role}</Typography>
+          
         </TableCell>
       </TableRow>
 
@@ -148,7 +142,7 @@ export default function StaffTableRow({
             onEditRow();
             handleClosePopover();
           }}
-          disabled={!modulePermit.edit}
+          // disabled={!modulePermit.edit}
         >
           <Iconify icon="eva:edit-fill" />
           Edit
@@ -160,7 +154,7 @@ export default function StaffTableRow({
             handleClosePopover();
           }}
           sx={{ color: 'error.main' }}
-          disabled={!modulePermit.delete || role?.roleName.toLowerCase() === 'super admin'}
+          // disabled={!modulePermit.delete || role?.roleName.toLowerCase() === 'super admin'}
         >
           <Iconify icon="eva:trash-2-outline" />
           Delete

@@ -42,15 +42,16 @@ export default function StaffForm({ isEdit = false, isView = false, currentStaff
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/avif'];
     return allowedTypes.includes(file.type);
   };
-
-  const { allRoleData } = useSelector((store) => store?.role);
+  const allRoleData = ['hostel staff', 'admin'];
+  // const { allRoleData } = useSelector((store) => store?.role);
   const { isLoading } = useSelector((store) => store?.staff);
 
   const StaffSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required.'),
-    image: Yup.mixed().test('fileOrURL', 'Select a valid Image (max 1MB)', (value) => {
+    firstName: Yup.string().required('First Name is required.'),
+    lastName: Yup.string().required('Last Name is required.'),
+    avatar: Yup.mixed().test('fileOrURL', 'Select a valid avatar (max 1MB)', (value) => {
       if (isEdit) {
-        // If in edit mode, check if the value is a valid URL (HTTPS link) or a valid image
+        // If in edit mode, check if the value is a valid URL (HTTPS link) or a valid avatar
         return (
           Yup.string()
             .url()
@@ -62,7 +63,7 @@ export default function StaffForm({ isEdit = false, isView = false, currentStaff
             value[0].size <= 1048576)
         );
       }
-      // If not in edit mode, check if a file is uploaded and if it's a valid image
+      // If not in edit mode, check if a file is uploaded and if it's a valid avatar
       return (
         value &&
         value[0] instanceof File &&
@@ -71,7 +72,7 @@ export default function StaffForm({ isEdit = false, isView = false, currentStaff
         // (typeof value[0] === 'string' && validateImageURL(value[0]))
       );
     }),
-    mobileNumber: Yup.string()
+    phoneNumber: Yup.string()
       .required('Mobile number is required ')
       .test('mobile-error', 'Mobile number must be 10 digit.', (value) => {
         if (String(value)?.length === 10) return true;
@@ -81,15 +82,16 @@ export default function StaffForm({ isEdit = false, isView = false, currentStaff
       .required('Email is required.')
       .email('Email must be a valid email address.'),
     password: !isEdit ? Yup.string().required('Password is required.') : '',
-    role: Yup.object().required('Role is required.'),
+    role: Yup.mixed().required('Role is required.'),
   });
 
   const defaultValues = useMemo(
     () => ({
-      name: currentStaff?.name,
-      image: currentStaff?.image || [],
+      firstName: currentStaff?.firstName,
+      lastName: currentStaff?.lastName,
+      avatar: currentStaff?.avatar || [],
       role: currentStaff?.role || null,
-      mobileNumber: currentStaff?.mobileNumber || '',
+      phoneNumber: currentStaff?.phoneNumber || '',
       email: currentStaff?.email || '',
     }),
     [currentStaff]
@@ -121,7 +123,7 @@ export default function StaffForm({ isEdit = false, isView = false, currentStaff
   useEffect(() => {
     if ((isEdit && currentStaff) || (isView && currentStaff)) {
       reset(defaultValues);
-      setImageFiles(currentStaff?.image ? [{ preview: currentStaff.image }] : []);
+      setImageFiles(currentStaff?.avatar ? [{ preview: currentStaff.avatar }] : []);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit, isView, currentStaff]);
@@ -137,9 +139,9 @@ export default function StaffForm({ isEdit = false, isView = false, currentStaff
       if (file) {
         setImageFiles([newFile]);
         setImagePreview(newFile.preview);
-        setValue('image', [newFile]);
+        setValue('avatar', [newFile]);
       }
-      methods.trigger('image');
+      methods.trigger('avatar');
     },
     [methods, setValue]
   );
@@ -147,15 +149,16 @@ export default function StaffForm({ isEdit = false, isView = false, currentStaff
   const onSubmit = async (data) => {
     const formData = new FormData();
 
-    formData.append('name', data.name);
-    formData.append('role', data.role._id);
+    formData.append('firstName', data.firstName);
+    formData.append('lastName', data.lastName);
+    formData.append('role', data.role);
     formData.append('email', data.email);
-    formData.append('mobileNumber', data.mobileNumber);
+    formData.append('phoneNumber', data.phoneNumber);
     formData.append('password', data.password);
-    if (data.image && data.image[0] instanceof File) {
-      formData.append('image', data.image[0]);
-    } else if (currentStaff?.image) {
-      formData.append('image', data.image);
+    if (data.avatar && data.avatar[0] instanceof File) {
+      formData.append('avatar', data.avatar[0]);
+    } else if (currentStaff?.avatar) {
+      formData.append('avatar', data.avatar);
     }
     try {
       const response = await dispatch(
@@ -179,16 +182,16 @@ export default function StaffForm({ isEdit = false, isView = false, currentStaff
   };
 
   useEffect(() => {
-    if (currentStaff?.image) {
-      setImageFiles([currentStaff.image]);
-      setValue('image', [currentStaff?.image]);
+    if (currentStaff?.avatar) {
+      setImageFiles([currentStaff.avatar]);
+      setValue('avatar', [currentStaff?.avatar]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentStaff]);
 
-  useEffect(() => {
-    dispatch(getRoleListAsync());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(getRoleListAsync());
+  // }, [dispatch]);
 
   return (
     <>
@@ -218,28 +221,29 @@ export default function StaffForm({ isEdit = false, isView = false, currentStaff
                   sm: 'repeat(2, 1fr)',
                 }}
               >
-                <RHFTextField disabled={isView} name="name" label="Name" />
+                <RHFTextField disabled={isView} name="firstName" label="First Name" />
+                <RHFTextField disabled={isView} name="lastName" label="last Name" />
                 <Box>
                   <UploadBox
                     disabled={isView}
                     height={58}
-                    name="image"
-                    label="Image (max 1MB)"
+                    name="avatar"
+                    label="Avatar (max 1MB)"
                     accept={{
                       'image/*': [],
                     }}
                     onDrop={handleDrop}
                     file={imageFiles[0]}
-                    error={Boolean(errors.image) && (!values.image || values.image.length === 0)}
+                    error={Boolean(errors.avatar) && (!values.avatar || values.avatar.length === 0)}
                   />
-                  {errors.image && values.image && (
+                  {errors.avatar && values.avatar && (
                     <Typography color="error" variant="caption">
-                      {errors.image.message}
+                      {errors.avatar.message}
                     </Typography>
                   )}
                 </Box>
                 <Controller
-                  name="mobileNumber"
+                  name="phoneNumber"
                   control={control}
                   render={({ field, fieldState: { error } }) => (
                     <RHFTextField
@@ -272,11 +276,9 @@ export default function StaffForm({ isEdit = false, isView = false, currentStaff
                   label="Role"
                   options={allRoleData}
                   getOptionLabel={(option) =>
-                    option && option.roleName
-                      ? option.roleName.replace(/\b\w/g, (char) => char.toUpperCase())
-                      : ''
+                    option && option ? option.replace(/\b\w/g, (char) => char.toUpperCase()) : ''
                   }
-                  isOptionEqualToValue={(option, value) => option._id === value._id}
+                  isOptionEqualToValue={(option, value) => option === value}
                 />
               </Box>
 

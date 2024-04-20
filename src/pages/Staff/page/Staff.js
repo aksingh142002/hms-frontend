@@ -15,7 +15,7 @@ export default function StaffCreatePage() {
   const { staffById } = useSelector((state) => state?.staff);
   const { id } = useParams();
   const { pathname = '', state } = useLocation();
-
+  console.log('state', state)
   const editView = useMemo(() => {
     if (id && /edit/i?.test(pathname)) {
       return {
@@ -44,10 +44,10 @@ export default function StaffCreatePage() {
     };
   }, [pathname, id]);
 
-  useEffect(() => {
-    if (id) dispatch(getStaffByIdAsync({ id }));
-    // eslint-disable-next-line
-  }, []);
+  // useEffect(() => {
+  //   if (id) dispatch(getStaffByIdAsync({ id }));
+  //   // eslint-disable-next-line
+  // }, []);
 
   return (
     <>
@@ -76,7 +76,7 @@ export default function StaffCreatePage() {
         <StaffForm
           isEdit={editView?.isEdit}
           isView={editView?.isView}
-          currentStaff={editView?.isEdit || editView?.isView ? staffById : {}}
+          currentStaff={editView?.isEdit || editView?.isView ? state : {}}
         />
       </Container>
     </>

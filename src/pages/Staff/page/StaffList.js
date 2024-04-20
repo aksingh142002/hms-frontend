@@ -27,7 +27,6 @@ const TABLE_HEAD = [
   { id: 'name', label: 'Name', align: 'left' },
   { id: 'Mobile', label: 'Mobile Number', align: 'left' },
   { id: 'Email', label: 'Email', align: 'left' },
-  { id: 'lastLogin', label: 'Last Login', align: 'left' },
 
   { id: 'Role', label: 'Role', align: 'left' },
 ];
@@ -57,8 +56,11 @@ export default function StaffList() {
 
   const { isLoading, staffData, totalCount } = useSelector((store) => store?.staff);
   const { modulePermit } = useSelector((store) => store?.menupermission);
-  const { allRoleData } = useSelector((store) => store?.role);
-
+  // const { allRoleData } = useSelector((store) => store?.role);
+  const allRoleData = [
+    { _id: 1, roleName: 'hostel staff' },
+    { _id: 2, roleName: 'admin' },
+  ];
   const dispatch = useDispatch();
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -83,7 +85,7 @@ export default function StaffList() {
 
   const handleFilterSearch = () => {
     if (search || role) {
-      const updatedQuery = { ...query, page: 1, search, role: role?._id };
+      const updatedQuery = { ...query, page: 1, search, role: role?.roleName };
       setQuery(updatedQuery);
     }
   };
@@ -136,9 +138,9 @@ export default function StaffList() {
       return { ...p };
     });
   };
-  useEffect(() => {
-    dispatch(getRoleListAsync());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(getRoleListAsync());
+  // }, [dispatch]);
   useEffect(() => {
     dispatch(getStaffListAsync(query));
   }, [dispatch, query]);
@@ -163,7 +165,7 @@ export default function StaffList() {
               to={PATH_DASHBOARD.staff.new}
               variant="contained"
               startIcon={<Iconify icon="eva:plus-fill" />}
-              disabled={!modulePermit.create}
+              // disabled={!modulePermit.create}
             >
               New Staff
             </Button>

@@ -38,7 +38,7 @@ const staffSlice = createSlice({
     builder.addMatcher(isAnyOf(getStaffListAsync.fulfilled), (state, { payload }) => {
       state.isLoading = false;
       state.totalCount = payload?.data?.totalItems;
-      state.staffData = payload?.data?.data;
+      state.staffData = payload?.data?.staffList;
     });
     builder.addMatcher(isAnyOf(getStaffListAsync.rejected), (state, { payload }) => {
       state.isLoading = false;

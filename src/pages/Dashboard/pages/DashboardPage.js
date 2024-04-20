@@ -22,17 +22,17 @@ export default function DashboardPage() {
     navigate(path, { state: queryParameters });
   };
 
-  useEffect(() => {
-    dispatch(getDashboardAsync());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   dispatch(getDashboardAsync());
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
-  const staffPermission =
-    permissionMenu[0].items?.filter((item) => item?.title === 'Staff')?.length !== 0;
-  const userPermission =
-    permissionMenu[0].items?.filter((item) => item?.title === 'User')?.length !== 0;
-  const myAppointmentPermission =
-    permissionMenu[0].items?.filter((item) => item?.title === 'My Appointment')?.length !== 0;
+  // const staffPermission =
+  //   permissionMenu[0].items?.filter((item) => item?.title === 'Staff')?.length !== 0;
+  // const userPermission =
+  //   permissionMenu[0].items?.filter((item) => item?.title === 'User')?.length !== 0;
+  // const myAppointmentPermission =
+  //   permissionMenu[0].items?.filter((item) => item?.title === 'My Appointment')?.length !== 0;
 
   return (
     <>

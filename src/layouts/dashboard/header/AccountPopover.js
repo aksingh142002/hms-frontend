@@ -54,16 +54,20 @@ export default function AccountPopover() {
   };
 
   const handleLogout = async () => {
+    console.log('first')
     try {
+      console.log('second')
       // logout();
       const response = await dispatch(postLogoutAsync());
+      console.log('response', response)
       if (response?.payload?.success) {
         navigate(PATH_AUTH.login, { replace: true });
         enqueueSnackbar(response?.payload?.message);
-        localStorage.clear();
+        // localStorage.clear();
         handleClosePopover();
       }
     } catch (error) {
+      console.log('error')
       console.error(error);
       enqueueSnackbar('Unable to logout!', { variant: 'error' });
     }

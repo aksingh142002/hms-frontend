@@ -40,6 +40,7 @@ export default function Header({ onOpenNav }) {
   const isOffset = useOffSetTop(HEADER.H_DASHBOARD_DESKTOP) && !isNavHorizontal;
 
 const user = JSON.parse(localStorage.getItem('userData'))
+console.log('user', user)
   const renderContent = (
     <>
       {isDesktop && isNavHorizontal && <Logo sx={{ mr: 2.5 }} />}
@@ -51,7 +52,7 @@ const user = JSON.parse(localStorage.getItem('userData'))
       )}
 
       {/* <Searchbar /> */}
-      <Typography variant='h5' sx={{ textTransform: 'capitalize' }}> Hello, {user?.name} ( {user?.role?.roleName} )</Typography>
+      <Typography variant='h5' sx={{ textTransform: 'capitalize' }}> Hello, {user?.firstName} {user?.lastName} </Typography>
       <Stack
         flexGrow={1}
         direction="row"
