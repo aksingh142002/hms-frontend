@@ -19,3 +19,12 @@ export const postLogoutAsync = createAsyncThunk('auth/postLogoutAsync', async(da
     // data
   })
 )
+
+export const postStudentLoginAsync = createAsyncThunk('course/postStudentLoginAsync', async (data, toolkit) =>
+  AxiosClient({
+    toolkit,
+    url: '/student/login-student',
+    method: 'post',
+    data,
+  })
+);

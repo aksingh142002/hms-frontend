@@ -37,6 +37,20 @@ const loginSlice = createSlice({
       state.isLoading = false;
       // state.login = [];
     });
+
+    // Add Course ----------
+    builder.addMatcher(isAnyOf(postLoginAsync.pending), (state, { payload }) => {
+      state.isLoading = true;
+    });
+    builder.addMatcher(isAnyOf(postLoginAsync.fulfilled), (state, { payload }) => {
+      state.isLoading = false;
+      state.loginStudent = payload;
+    });
+    builder.addMatcher(isAnyOf(postLoginAsync.rejected), (state, { payload }) => {
+      state.isLoading = false;
+      state.loginStudent = [];
+    });
+
   },
 });
 

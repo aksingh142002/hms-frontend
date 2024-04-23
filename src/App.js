@@ -27,7 +27,7 @@ import ThemeLocalization from './locales';
 // components
 import { MotionLazyContainer } from './components/animate';
 import ScrollToTop from './components/scroll-to-top';
-import { SettingsProvider } from './components/settings';
+import { SettingsProvider, ThemeSettings } from './components/settings';
 import SnackbarProvider from './components/snackbar';
 
 // Check our docs
@@ -51,14 +51,14 @@ export default function App() {
                   <ScrollToTop />
                   <MotionLazyContainer>
                     <ThemeProvider>
-                      {/* <ThemeSettings> */}
+                      <ThemeSettings>
                       <ThemeLocalization>
                         <SnackbarProvider>
                           <Toaster reverseOrder={false} />
                           <Router />
                         </SnackbarProvider>
                       </ThemeLocalization>
-                      {/* </ThemeSettings> */}
+                      </ThemeSettings>
                     </ThemeProvider>
                   </MotionLazyContainer>
                 </BrowserRouter>

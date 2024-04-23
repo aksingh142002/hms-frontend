@@ -10,7 +10,7 @@ import { LoadingButton } from '@mui/lab';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { useSnackbar } from '@components/snackbar';
-import { getPermissionByIdAsync, postLoginAsync } from '@redux/services';
+import { getPermissionByIdAsync, postStudentLoginAsync } from '@redux/services';
 import { Link as RouterLink } from 'react-router-dom';
 import { PATH_AUTH, PATH_DASHBOARD } from '@routes/paths';
 import Iconify from '../../components/iconify';
@@ -18,7 +18,7 @@ import FormProvider, { RHFTextField } from '../../components/hook-form';
 
 // ----------------------------------------------------------------------
 
-export default function AuthLoginForm() {
+export default function AuthLoginFormStudent() {
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state) => state.login);
 
@@ -27,7 +27,8 @@ export default function AuthLoginForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
-    email: Yup.string().required('Email is required').email('Email must be a valid email address'),
+    emailOrRoll: Yup.string().required('Email or University Roll Number is required'),
+    
     password: Yup.string().required('Password is required'),
   });
 
@@ -43,18 +44,24 @@ export default function AuthLoginForm() {
 
   const onSubmit = async (data) => {
     try {
-      const response = await dispatch(postLoginAsync(data));
+      const payloadData = {password: data.password};
+    if (data.emailOrRoll.includes('@')) {
+      payloadData.email = data.emailOrRoll;
+    } else {
+      payloadData.rollNumber = data.emailOrRoll;
+    }
+
+    const response = await dispatch(postStudentLoginAsync(payloadData));
 
       if (response?.payload?.success) {
         console.log('response', response?.payload?.data?.accessToken)
         localStorage.setItem('token', response?.payload?.data?.accessToken);
         // const res = await dispatch(getPermissionByIdAsync(response?.payload?.data?.staff?.role?._id));
         // if (res?.payload?.success) {
-          localStorage.setItem(
-            'userData',
-            JSON.stringify({ ...response?.payload?.data?.data
-            })
-          );
+        localStorage.setItem(
+          'userData',
+          JSON.stringify({ ...response?.payload?.data?.data })
+        );
         // }
         enqueueSnackbar('Logged in successfully');
         navigate(PATH_DASHBOARD.dashboard.root);
@@ -74,7 +81,7 @@ export default function AuthLoginForm() {
       <Stack spacing={3}>
         {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
 
-        <RHFTextField name="email" label="Email address" />
+        <RHFTextField name="emailOrRoll" label="University Roll Number or Email address" />
 
         <RHFTextField
           name="password"

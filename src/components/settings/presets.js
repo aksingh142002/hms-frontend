@@ -46,7 +46,7 @@ export const presets = [
     name: 'orange',
     lighter: '#FEF4D4',
     light: '#FED680',
-    main: '#fda92d',
+    main: '#ff6600',
     dark: '#B66816',
     darker: '#793908',
     contrastText: themePalette.grey[800],
@@ -63,7 +63,7 @@ export const presets = [
   },
 ];
 
-export const defaultPreset = presets[0];
+export const defaultPreset = presets[4];
 export const cyanPreset = presets[1];
 export const purplePreset = presets[2];
 export const bluePreset = presets[3];

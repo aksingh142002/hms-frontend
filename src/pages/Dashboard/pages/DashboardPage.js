@@ -40,69 +40,86 @@ export default function DashboardPage() {
         <title> Dashboard | OPJU Hostel </title>
       </Helmet>
       <Container maxWidth={themeStretch ? false : 'lg'}>
-        {/* <Grid container spacing={3} mt={2}>
-          {userPermission && (
+        <Grid container spacing={3} mt={2}>
+          {/* {userPermission && ( */}
             <Grid item xs={12} sm={6} md={3}>
               <CustomCard
-                title="New Users"
-                total={dashboardData?.totalUsers}
+                title="Total Hosteller"
+                // total={dashboardData?.totalUsers}
+                total='40'
                 color="secondary"
-                icon="majesticons:user"
+                icon="fa6-solid:users"
                 onClick={() => handleCardClick({ path: PATH_DASHBOARD.user.list })}
               />
             </Grid>
-          )}
-          {staffPermission && (
+          {/* )}
+          {staffPermission && ( */}
             <Grid item xs={12} sm={6} md={3}>
               <CustomCard
                 title="Total Staff"
-                total={dashboardData?.totalStaff}
+                // total={dashboardData?.totalStaff}
+                total='5'
                 color="error"
-                icon="medical-icon:i-care-staff-area"
+                icon="majesticons:user"
                 onClick={() => handleCardClick({ path: PATH_DASHBOARD.staff.list })}
               />
             </Grid>
-          )}
-          {myAppointmentPermission && (
+          {/* )}
+          {myAppointmentPermission && ( */}
             <Grid item xs={12} sm={6} md={3}>
               <CustomCard
-                title="Today Appointments"
-                total={dashboardData?.todaysApponitment}
+                title="Available Room"
+                // total={dashboardData?.todaysApponitment}
+                total='9'
                 color="primary"
-                icon="healthicons:group-discussion-meeting"
+                icon="mdi:guest-room"
                 onClick={() =>
                   handleCardClick({ path: PATH_DASHBOARD.appointment.list, data: 'Today' })
                 }
               />
             </Grid>
-          )}
-          {myAppointmentPermission && (
+          {/* )}
+          {myAppointmentPermission && ( */}
             <Grid item xs={12} sm={6} md={3}>
               <CustomCard
-                title="Tomorrow Appointments"
-                total={dashboardData?.tomorrowsAppointment}
+                title="Total Rooms"
+                // total={dashboardData?.tomorrowsAppointment}
+                total={20}
                 color="info"
-                icon="healthicons:group-discussion-meeting"
+                icon="mdi:guest-room"
                 onClick={() =>
                   handleCardClick({ path: PATH_DASHBOARD.appointment.list, data: 'Tomorrow' })
                 }
               />
             </Grid>
-          )}
-          {userPermission && (
+          {/* )}
+          {userPermission && ( */}
+          <Grid item xs={12} sm={6} md={3}>
+              <CustomCard
+                title="Pending Leave Approval"
+                // total={dashboardData?.todaysApponitment}
+                total='9'
+                color="primary"
+                icon="material-symbols-light:luggage"
+                onClick={() =>
+                  handleCardClick({ path: PATH_DASHBOARD.appointment.list, data: 'Today' })
+                }
+              />
+            </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <CustomCard
-                title="Active Users"
-                total={dashboardData?.totalActiveUsers}
+                title="Leave Approved"
+                // total={dashboardData?.totalActiveUsers}
+                total={20}
                 color="secondary"
-                icon="fa6-solid:users"
+                icon="material-symbols-light:luggage"
                 onClick={() => handleCardClick({ path: PATH_DASHBOARD.user.list, data: 'Paid' })}
               />
             </Grid>
-          )}
+          {/* )}
           {myAppointmentPermission ? <AppointmentCard /> : null}
-          {userPermission ? <UserTableCard /> : null}
-        </Grid> */}
+          {userPermission ? <UserTableCard /> : null} */}
+        </Grid>
       </Container>
     </>
   );
