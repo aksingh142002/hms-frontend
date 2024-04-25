@@ -42,8 +42,10 @@ export default function StudentForm({ isEdit = false, isView = false, currentStu
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/avif'];
     return allowedTypes.includes(file.type);
   };
-  const allRoleData = ['hostel staff', 'admin'];
-  // const { allRoleData } = useSelector((store) => store?.role);
+  const allDepartmentData = ['School of Science', 'School of Engineering', 'School of Management'];
+  const allCourseData = ['BTech', 'BBA', 'BSC', 'MTech', 'MBA', 'MSC', 'Diploma'];
+  const allBranchData = ['Computer Science Engineering', 'Civil Engineering', 'Electrical Engineering', 'Mechanical Engineering', 'Metallurgical Engineering']
+  // const { allDepartmentData } = useSelector((store) => store?.role);
   const { isLoading } = useSelector((store) => store?.student);
 
   const StudentSchema = Yup.object().shape({
@@ -82,7 +84,12 @@ export default function StudentForm({ isEdit = false, isView = false, currentStu
       .required('Email is required.')
       .email('Email must be a valid email address.'),
     password: !isEdit ? Yup.string().required('Password is required.') : '',
-    role: Yup.string().required('Role is required.'),
+    branch: Yup.string(),
+    rollNumber: Yup.string().required('University Roll number is required.'),
+    department: Yup.string().required('Department is required.'),
+    course: Yup.string().required('Course is required.'),
+    batch: Yup.string().required('Batch is required.'),
+    address: Yup.string().required('Address is required.'),
   });
 
   const defaultValues = useMemo(
@@ -90,9 +97,15 @@ export default function StudentForm({ isEdit = false, isView = false, currentStu
       firstName: currentStudent?.firstName,
       lastName: currentStudent?.lastName,
       avatar: currentStudent?.avatar || [],
-      role: currentStudent?.role || null,
       phoneNumber: currentStudent?.phoneNumber || '',
+      password: currentStudent?.password || '',
       email: currentStudent?.email || '',
+      branch: currentStudent?.branch || '',
+      rollNumber: currentStudent?.rollNumber || '',
+      department: currentStudent?.department || null,
+      course: currentStudent?.course || null,
+      batch: currentStudent?.batch || '',
+      address: currentStudent?.address || '',
     }),
     [currentStudent]
   );
@@ -111,7 +124,7 @@ export default function StudentForm({ isEdit = false, isView = false, currentStu
     formState: { isSubmitting, errors },
   } = methods;
 
-  const roleType = watch('role');
+  const departmentType = watch('department');
   const values = getValues();
 
   const [selectedValues, setSelectedValues] = useState([]);
@@ -151,10 +164,15 @@ export default function StudentForm({ isEdit = false, isView = false, currentStu
 
     formData.append('firstName', data.firstName);
     formData.append('lastName', data.lastName);
-    formData.append('role', data.role);
     formData.append('email', data.email);
     formData.append('phoneNumber', data.phoneNumber);
     formData.append('password', data.password);
+    formData.append('department', data.department);
+    formData.append('course', data.course);
+    formData.append('branch', data.branch);
+    formData.append('rollNumber', data.rollNumber);
+    formData.append('batch', data.batch);
+    formData.append('address', data.address);
     if (data.avatar && data.avatar[0] instanceof File) {
       formData.append('avatar', data.avatar[0]);
     } else if (currentStudent?.avatar) {
@@ -222,7 +240,7 @@ export default function StudentForm({ isEdit = false, isView = false, currentStu
                 }}
               >
                 <RHFTextField disabled={isView} name="firstName" label="First Name" />
-                <RHFTextField disabled={isView} name="lastName" label="last Name" />
+                <RHFTextField disabled={isView} name="lastName" label="Last Name" />
                 <Box>
                   <UploadBox
                     disabled={isView}
@@ -267,21 +285,44 @@ export default function StudentForm({ isEdit = false, isView = false, currentStu
                   )}
                 />
                 <RHFTextField disabled={isView} name="email" label="Email" />
-                {!isEdit && !isView && (
-                  <RHFTextField disabled={isView} name="password" label="Password" />
-                )}
+                {/* {!isEdit && !isView && ( */}
+                <RHFTextField disabled={isView} name="password" label="Password" />
+                {/* )} */}
                 <RHFAutocomplete
                   disabled={isView}
-                  name="role"
-                  label="Role"
-                  options={allRoleData}
+                  name="department"
+                  label="Department"
+                  options={allDepartmentData}
                   getOptionLabel={(option) =>
                     option && option ? option.replace(/\b\w/g, (char) => char.toUpperCase()) : ''
                   }
                   isOptionEqualToValue={(option, value) => option === value}
                 />
+                {/* <RHFTextField disabled={isView} name="email" label="Email" /> */}
+                <RHFAutocomplete
+                  disabled={isView}
+                  name="course"
+                  label="Course"
+                  options={allCourseData}
+                  getOptionLabel={(option) =>
+                    option && option ? option.replace(/\b\w/g, (char) => char.toUpperCase()) : ''
+                  }
+                  isOptionEqualToValue={(option, value) => option === value}
+                />
+                <RHFAutocomplete
+                  disabled={isView}
+                  name="branch"
+                  label="Branch"
+                  options={allBranchData}
+                  getOptionLabel={(option) =>
+                    option && option ? option.replace(/\b\w/g, (char) => char.toUpperCase()) : ''
+                  }
+                  isOptionEqualToValue={(option, value) => option === value}
+                />
+                <RHFTextField disabled={isView} name="rollNumber" label="University Roll Number" />
+                <RHFTextField disabled={isView} name="batch" label="Batch" />
+                <RHFTextField disabled={isView} name="address" label="Address" />
               </Box>
-
               {isView ? (
                 <Stack alignItems="flex-end" sx={{ mt: 3 }}>
                   <LoadingButton onClick={handleBack} type="button" variant="contained">

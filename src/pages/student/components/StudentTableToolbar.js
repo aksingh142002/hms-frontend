@@ -8,9 +8,9 @@ StaffTableToolbar.propTypes = {
   onFilterName: PropTypes.func,
   onResetFilter: PropTypes.func,
   onFilterSearch: PropTypes.func,
-  roleData: PropTypes.array,
-  role: PropTypes.object,
-  onRoleChange: PropTypes.func,
+  courseData: PropTypes.array,
+  course: PropTypes.object,
+  onCourseChange: PropTypes.func,
 };
 
 export default function StaffTableToolbar({
@@ -18,18 +18,18 @@ export default function StaffTableToolbar({
   onFilterName,
   onResetFilter,
   onFilterSearch,
-  roleData,
+  courseData,
 
-  role,
-  onRoleChange,
+  course,
+  onCourseChange,
 }) {
-  const handleRoleChange = (event, value) => {
-    onRoleChange(value);
+  const handleCourseChange = (event, value) => {
+    onCourseChange(value);
   };
 
   const handleResetFilter = () => {
     onResetFilter();
-    onRoleChange(null);
+    onCourseChange(null);
   };
 
   return (
@@ -58,15 +58,15 @@ export default function StaffTableToolbar({
         </Grid>
         <Grid item xs={12} sm={3}>
           <Autocomplete
-            options={roleData}
-            value={role}
-            onChange={handleRoleChange}
+            options={courseData}
+            value={course}
+            onChange={handleCourseChange}
             getOptionLabel={(option) =>
-                    option && option.roleName
-                      ? option.roleName.replace(/\b\w/g, (char) => char.toUpperCase())
+                    option && option
+                      ? option.replace(/\b\w/g, (char) => char.toUpperCase())
                       : ''
                   }
-            renderInput={(params) => <TextField {...params} label="Role" size="medium" fullWidth />}
+            renderInput={(params) => <TextField {...params} label="Course" size="medium" fullWidth />}
           />
         </Grid>
 

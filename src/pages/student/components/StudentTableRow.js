@@ -45,7 +45,7 @@ export default function StaffTableRow({
   query,
   modulePermit,
 }) {
-  const { firstName, lastName, avatar, phoneNumber, email, role } = row;
+  const { firstName, lastName, avatar, phoneNumber, email, batch, rollNumber, course } = row;
 
   const { page, limit } = query;
 
@@ -95,16 +95,15 @@ export default function StaffTableRow({
             </Typography>
           </Stack>
         </TableCell>
-
+        <TableCell sx={{ textTransform: 'capitalize' }}>
+          
+          <Typography variant="subtitle2">{rollNumber}</Typography>
+        
+      </TableCell>
         <TableCell align="left">
           <Typography variant="subtitle2">{phoneNumber}</Typography>
         </TableCell>
 
-        <TableCell align="left">
-          <Label variant="soft" sx={{ textTransform: 'none' }}>
-            <Typography variant="subtitle2">{email}</Typography>
-          </Label>
-        </TableCell>
 
         {/* <TableCell align="left">
           <Typography variant="subtitle2">
@@ -115,9 +114,15 @@ export default function StaffTableRow({
         </TableCell> */}
 
         <TableCell sx={{ textTransform: 'capitalize' }}>
-          
-            <Typography variant="subtitle2">{role}</Typography>
-          
+          <Typography variant="subtitle2">{batch}</Typography>
+        </TableCell>
+        <TableCell sx={{ textTransform: 'capitalize' }}>
+          <Typography variant="subtitle2">{course}</Typography>
+        </TableCell>
+        <TableCell align="left">
+          <Label variant="soft" sx={{ textTransform: 'none' }}>
+            <Typography variant="subtitle2">{email}</Typography>
+          </Label>
         </TableCell>
       </TableRow>
 

@@ -222,7 +222,7 @@ export default function StaffForm({ isEdit = false, isView = false, currentStaff
                 }}
               >
                 <RHFTextField disabled={isView} name="firstName" label="First Name" />
-                <RHFTextField disabled={isView} name="lastName" label="last Name" />
+                <RHFTextField disabled={isView} name="lastName" label="Last Name" />
                 <Box>
                   <UploadBox
                     disabled={isView}

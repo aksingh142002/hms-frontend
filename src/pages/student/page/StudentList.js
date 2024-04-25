@@ -16,7 +16,7 @@ import {
   getComparator,
   TableSkeleton,
 } from '@components/table';
-import { deleteStudentAsync, getRoleListAsync, getStudentListAsync } from '@redux/services';
+import { deleteStudentAsync, getCourseListAsync, getStudentListAsync } from '@redux/services';
 import { useDispatch, useSelector } from 'react-redux';
 import { StudentTableRow, StudentTableToolbar } from '../components';
 // ----------------------------------------------------------------------
@@ -25,10 +25,11 @@ const TABLE_HEAD = [
   { id: 'action', label: 'Action', align: 'left' },
   { id: 'Sr. No', label: 'Sr. No', align: 'left' },
   { id: 'name', label: 'Name', align: 'left' },
+  { id: 'universityRollNumber', label: 'University Roll No', align: 'left' },
   { id: 'Mobile', label: 'Mobile Number', align: 'left' },
+  { id: 'batch', label: 'Batch', align: 'left' },
+  { id: 'course', label: 'Course', align: 'left' },
   { id: 'Email', label: 'Email', align: 'left' },
-
-  { id: 'Role', label: 'Role', align: 'left' },
 ];
 
 const limit = localStorage.getItem('table-rows-per-page') ?? 10;
@@ -56,16 +57,14 @@ export default function StudentList() {
 
   const { isLoading, studentData, totalCount } = useSelector((store) => store?.student);
   const { modulePermit } = useSelector((store) => store?.menupermission);
-  // const { allRoleData } = useSelector((store) => store?.role);
-  const allRoleData = [
-    { _id: 1, roleName: 'hostel staff' },
-    { _id: 2, roleName: 'admin' },
-  ];
+  // const { allCourseData } = useSelector((store) => store?.Course);
+  
+  const allCourseData = ['BTech', 'BBA', 'BSC', 'MTech', 'MBA', 'MSC', 'Diploma'];
   const dispatch = useDispatch();
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [search, setSearch] = useState('');
-  const [role, setRole] = useState(null);
+  const [course, setCourse] = useState(null);
 
   const [query, setQuery] = useState(DEFAULT_QUERY);
 
@@ -84,15 +83,15 @@ export default function StudentList() {
   };
 
   const handleFilterSearch = () => {
-    if (search || role) {
-      const updatedQuery = { ...query, page: 1, search, role: role?.roleName };
+    if (search || course) {
+      const updatedQuery = { ...query, page: 1, search, course };
       setQuery(updatedQuery);
     }
   };
   const handleResetFilter = () => {
-    if (search || role) {
+    if (search || course) {
       setSearch('');
-      const updatedQuery = { ...query, page: 1, search: '', role: '' };
+      const updatedQuery = { ...query, page: 1, search: '', course: '' };
       setQuery(updatedQuery);
     }
   };
@@ -139,7 +138,7 @@ export default function StudentList() {
     });
   };
   // useEffect(() => {
-  //   dispatch(getRoleListAsync());
+  //   dispatch(getCourseListAsync());
   // }, [dispatch]);
   useEffect(() => {
     dispatch(getStudentListAsync(query));
@@ -177,9 +176,9 @@ export default function StudentList() {
           <StudentTableToolbar
             filterSearch={search}
             onFilterSearch={handleFilterSearch}
-            roleData={allRoleData}
-            role={role}
-            onRoleChange={setRole}
+            courseData={allCourseData}
+            course={course}
+            onCourseChange={setCourse}
             onFilterName={handleFilterName}
             onResetFilter={handleResetFilter}
           />
