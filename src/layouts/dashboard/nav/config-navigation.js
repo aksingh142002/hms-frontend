@@ -11,16 +11,17 @@ const icon = (name) => (
 
 const ICONS = {
   master: icon('master'),
-  student: icon('ic_user'),
+  student: icon('user'),
   ecommerce: icon('ic_ecommerce'),
   analytics: icon('ic_analytics'),
-  dashboard: icon('ic_dashboard'),
-  users: icon('users'),
+  dashboard: icon('dashboard'),
+  users: icon('user'),
   services: icon('public-health'),
   testimonial:icon('ic_testimonial'),
   resources:icon('ic_resources'),
   plan: icon('plan'),
-  staff: icon('medical-doctor'),
+  staff: icon('staff'),
+  leave: icon('leave'),
   report:icon('report'),
   diet:icon('food-24-filled'),
   booking:icon('ic_booking')
@@ -34,7 +35,6 @@ const navConfig = [
         title: 'Dashboard',
         path: PATH_DASHBOARD.dashboard.root,
         icon: ICONS.dashboard,
-        // icon: ICONS.dashboard,
       },
    
       // {
@@ -62,6 +62,11 @@ const navConfig = [
         path: PATH_DASHBOARD.student.root,
         icon: ICONS.student,
       },
+      {
+        title: 'Leave',
+        path: PATH_DASHBOARD.leave.root,
+        icon: ICONS.leave,
+      },
       // {
       //   title: 'Service',
       //   path: PATH_DASHBOARD.services.root,
@@ -80,11 +85,6 @@ const navConfig = [
       //       path: PATH_DASHBOARD.nutriservices.root,
       //     },
       //   ],
-      // },
-      // {
-      //   title: 'Plan',
-      //   path: PATH_DASHBOARD.package.root,
-      //   icon: ICONS.plan,
       // },
       // {
       //   title: 'Reports',

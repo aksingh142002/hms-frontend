@@ -161,6 +161,7 @@ export default function StaffList() {
           ]}
           action={
             <Button
+              sx={{ color: 'white' }}
               component={RouterLink}
               to={PATH_DASHBOARD.staff.new}
               variant="contained"

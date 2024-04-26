@@ -16,30 +16,34 @@ import {
   getComparator,
   TableSkeleton,
 } from '@components/table';
-import { deleteStudentAsync, getCourseListAsync, getStudentListAsync } from '@redux/services';
+import {
+  deleteLeaveAsync,
+  getLeaveListAsync,
+  getStaffDocOrNutrAsync,
+  getStaffListAsync,
+} from '@redux/services';
 import { useDispatch, useSelector } from 'react-redux';
-import { StudentTableRow, StudentTableToolbar } from '../components';
+import { LeaveTableRow, LeaveTableToolbar } from '../components';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'action', label: 'Action', align: 'left' },
   { id: 'Sr. No', label: 'Sr. No', align: 'left' },
-  { id: 'name', label: 'Name', align: 'left' },
-  { id: 'universityRollNumber', label: 'University Roll No', align: 'left' },
-  { id: 'Mobile', label: 'Mobile Number', align: 'left' },
-  { id: 'batch', label: 'Batch', align: 'left' },
-  { id: 'course', label: 'Course', align: 'left' },
-  { id: 'Email', label: 'Email', align: 'left' },
+  { id: 'staff', label: 'Staff', align: 'left' },
+  { id: 'role', label: 'Role', align: 'left' },
+  { id: 'startDate', label: 'Start Date', align: 'left' },
+  { id: 'endDate', label: 'End Date', align: 'left' },
 ];
 
 const limit = localStorage.getItem('table-rows-per-page') ?? 10;
 const DEFAULT_QUERY = { page: 1, limit: Number(limit) };
 
-export default function StudentList() {
+export default function LeaveList() {
   const {
     dense,
     order,
     orderBy,
+    //
     selected,
     onSelectRow,
     onSort,
@@ -54,17 +58,18 @@ export default function StudentList() {
   const { enqueueSnackbar } = useSnackbar();
 
   const navigate = useNavigate();
+  const { staffDocOrNut, staffData } = useSelector((store) => store?.staff);
 
-  const { isLoading, studentData, totalCount } = useSelector((store) => store?.student);
+  const { isLoading, allLeaveData, totalCount } = useSelector((store) => store?.leave);
   const { modulePermit } = useSelector((store) => store?.menupermission);
-  // const { allCourseData } = useSelector((store) => store?.Course);
-  
-  const allCourseData = ['BTech', 'BBA', 'BSC', 'MTech', 'MBA', 'MSC', 'Diploma'];
+
   const dispatch = useDispatch();
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [search, setSearch] = useState('');
-  const [course, setCourse] = useState(null);
+  const [staff, setStaff] = useState(null);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   const [query, setQuery] = useState(DEFAULT_QUERY);
 
@@ -83,29 +88,31 @@ export default function StudentList() {
   };
 
   const handleFilterSearch = () => {
-    if (search || course) {
-      const updatedQuery = { ...query, page: 1, search, course };
+    if (startDate || staff) {
+      const updatedQuery = { ...query, page: 1, staffId: staff?._id, startDate, endDate };
       setQuery(updatedQuery);
     }
   };
+
   const handleResetFilter = () => {
-    if (search || course) {
+    if (startDate || staff) {
       setSearch('');
-      const updatedQuery = { ...query, page: 1, search: '', course: '' };
+      const updatedQuery = { ...query, page: 1, staffId: '', startDate: null, endDate: null };
       setQuery(updatedQuery);
     }
   };
   const handleDeleteRow = async (row, closeModal) => {
-    const response = await dispatch(deleteStudentAsync(row?._id));
+    // API call to delete row.
+    const response = await dispatch(deleteLeaveAsync(row?._id));
 
     if (response?.payload?.success) {
-      if (studentData?.length === 1 && query?.page > 1) {
+      if (allLeaveData?.length === 1 && query?.page > 1) {
         setQuery((p) => {
           p.page -= 1;
           return { ...p };
         });
       } else {
-        dispatch(getStudentListAsync(query));
+        dispatch(getLeaveListAsync(query));
       }
       closeModal();
       enqueueSnackbar(response?.payload?.message);
@@ -124,11 +131,11 @@ export default function StudentList() {
   };
 
   const handleEditRow = (row) => {
-    navigate(PATH_DASHBOARD.student.edit(row?._id), { state: row });
+    navigate(PATH_DASHBOARD.leave.edit(row?._id), { state: row });
   };
 
   const handleViewRow = (row) => {
-    navigate(PATH_DASHBOARD.student.view(row?._id), { state: row });
+    navigate(PATH_DASHBOARD.leave.view(row?._id), { state: row });
   };
 
   const handlePageChange = (event, newPage) => {
@@ -137,51 +144,59 @@ export default function StudentList() {
       return { ...p };
     });
   };
-  // useEffect(() => {
-  //   dispatch(getCourseListAsync());
-  // }, [dispatch]);
   useEffect(() => {
-    dispatch(getStudentListAsync(query));
+    // dispatch(getStaffDocOrNutrAsync());
+    dispatch(getStaffListAsync());
+  }, [dispatch]);
+  useEffect(() => {
+    dispatch(getLeaveListAsync(query));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, query]);
 
   return (
     <>
       <Helmet>
-        <title> Student: List | OPJU Hostel </title>
+        <title> Leave: List | VHAI </title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Student List"
+          heading="Leave List"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Student', href: PATH_DASHBOARD.student.list },
+            { name: 'Leave', href: PATH_DASHBOARD.leave.list },
             { name: 'List' },
           ]}
           action={
             <Button
               sx={{ color: 'white' }}
               component={RouterLink}
-              to={PATH_DASHBOARD.student.new}
+              to={PATH_DASHBOARD.leave.new}
               variant="contained"
               startIcon={<Iconify icon="eva:plus-fill" />}
-              // disabled={!modulePermit.create}
+              disabled={!modulePermit.create}
             >
-              New Student
+              New Leave
             </Button>
           }
         />
 
         <Card>
           <Divider />
-          <StudentTableToolbar
+          <LeaveTableToolbar
             filterSearch={search}
             onFilterSearch={handleFilterSearch}
-            courseData={allCourseData}
-            course={course}
-            onCourseChange={setCourse}
             onFilterName={handleFilterName}
             onResetFilter={handleResetFilter}
+            staffData={staffData?.filter(
+              (item) => item?.role.roleName?.trim()?.toLowerCase() !== 'super admin'
+            )}
+            staff={staff}
+            onStaffChange={setStaff}
+            startDate={startDate}
+            onStartDateChange={setStartDate}
+            endDate={endDate}
+            onEndDateChange={setEndDate}
           />
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
             <Scrollbar>
@@ -190,14 +205,15 @@ export default function StudentList() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={studentData?.length}
+                  rowCount={allLeaveData?.length}
                   numSelected={selected.length}
+                  // onSort={onSort}
                 />
 
                 <TableBody>
                   {isLoading ||
-                    studentData.map((row, index) => (
-                      <StudentTableRow
+                    allLeaveData.map((row, index) => (
+                      <LeaveTableRow
                         key={row._id}
                         row={row}
                         index={index}
@@ -211,7 +227,7 @@ export default function StudentList() {
                       />
                     ))}
 
-                  <TableNoData isNotFound={studentData?.length} isLoading={isLoading} />
+                  <TableNoData isNotFound={allLeaveData?.length} isLoading={isLoading} />
                 </TableBody>
               </Table>
             </Scrollbar>

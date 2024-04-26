@@ -21,8 +21,8 @@ export const Student = Loadable(lazy(() => import('@pages/student/page/Student')
 export const StudentList = Loadable(lazy(() => import('@pages/student/page/StudentList')));
 export const StaffList = Loadable(lazy(() => import('@pages/Staff/page/StaffList')));
 export const Staff = Loadable(lazy(() => import('@pages/Staff/page/Staff')));
-// export const PackageList = Loadable(lazy(() => import('@pages/Package/pages/PackageList')));
-// export const Package = Loadable(lazy(() => import('@pages/Package/pages/Package')));
+export const LeaveList = Loadable(lazy(() => import('@pages/Leave/pages/LeaveList')));
+export const Leave = Loadable(lazy(() => import('@pages/Leave/pages/Leave')));
 // export const RoleList = Loadable(lazy(() => import('@pages/masters/role/pages/RoleList')));
 // export const Role = Loadable(lazy(() => import('@pages/masters/role/pages/Role')));
 // export const PermissionsList = Loadable(

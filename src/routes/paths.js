@@ -35,6 +35,13 @@ export const PATH_DASHBOARD = {
     edit: (id) => path(ROOTS_DASHBOARD, `/staff/${id}/edit`),
     view: (id) => path(ROOTS_DASHBOARD, `/staff/${id}/view`),
   },
+  leave: {
+    root: path(ROOTS_DASHBOARD, '/leave/list'),
+    list: path(ROOTS_DASHBOARD, '/leave/list'),
+    new: path(ROOTS_DASHBOARD, '/leave/new'),
+    edit: (id) => path(ROOTS_DASHBOARD, `/leave/${id}/edit`),
+    view: (id) => path(ROOTS_DASHBOARD, `/leave/${id}/view`),
+  },
   // package: {
   //   root: path(ROOTS_DASHBOARD, '/package/list'),
   //   list: path(ROOTS_DASHBOARD, '/package/list'),

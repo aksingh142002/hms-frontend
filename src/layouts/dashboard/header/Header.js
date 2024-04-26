@@ -52,7 +52,7 @@ console.log('user', user)
       )}
 
       {/* <Searchbar /> */}
-      <Typography variant='h5' sx={{ textTransform: 'capitalize' }}> Hello, {user?.firstName} {user?.lastName} </Typography>
+      <Typography variant='h5' sx={{ textTransform: 'capitalize', color: 'white' }}> Hello, {user?.firstName} {user?.lastName} </Typography>
       <Stack
         flexGrow={1}
         direction="row"

@@ -19,15 +19,15 @@ import {
   Student,
   StudentList,
   DashboardPage,
+  StaffList,
+  Staff,
+  LeaveList,
+  Leave,
   DocServicesList,
   DocServices,
   RoleList,
   Role,
   PermissionsList,
-  PackageList,
-  Package,
-  StaffList,
-  Staff,
   Testimonial,
   TestimonialList,
   ResourcesList,
@@ -127,16 +127,6 @@ export default function Router() {
             { path: ':id/view', element: <Student /> },
           ],
         },
-        // {
-        //   path: 'package',
-        //   children: [
-        //     { element: <Navigate to="/dashboard/package/list" replace />, index: true },
-        //     { path: 'list', element: <PackageList /> },
-        //     { path: 'new', element: <Package /> },
-        //     { path: ':id/edit', element: <Package /> },
-        //     { path: ':id/view', element: <Package /> },
-        //   ],
-        // },
         {
           path: 'staff',
           children: [
@@ -145,6 +135,16 @@ export default function Router() {
             { path: 'new', element: <Staff /> },
             { path: ':id/edit', element: <Staff /> },
             { path: ':id/view', element: <Staff /> },
+          ],
+        },
+        {
+          path: 'leave',
+          children: [
+            { element: <Navigate to="/dashboard/leave/list" replace />, index: true },
+            { path: 'list', element: <LeaveList /> },
+            { path: 'new', element: <Leave /> },
+            { path: ':id/edit', element: <Leave /> },
+            { path: ':id/view', element: <Leave /> },
           ],
         },
     //     {

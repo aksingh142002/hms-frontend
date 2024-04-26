@@ -62,11 +62,11 @@ export default function StaffTableToolbar({
             value={course}
             onChange={handleCourseChange}
             getOptionLabel={(option) =>
-                    option && option
-                      ? option.replace(/\b\w/g, (char) => char.toUpperCase())
-                      : ''
-                  }
-            renderInput={(params) => <TextField {...params} label="Course" size="medium" fullWidth />}
+              option && option ? option.replace(/\b\w/g, (char) => char.toUpperCase()) : ''
+            }
+            renderInput={(params) => (
+              <TextField {...params} label="Course" size="medium" fullWidth />
+            )}
           />
         </Grid>
 
@@ -77,6 +77,7 @@ export default function StaffTableToolbar({
               onClick={onFilterSearch}
               sx={{
                 mt: { xs: 1, sm: 0 },
+                color: 'white',
               }}
             >
               Search
@@ -86,6 +87,7 @@ export default function StaffTableToolbar({
               sx={{
                 mt: { xs: 1, sm: 0 },
                 ml: { xs: 1, sm: 1 },
+                color: 'white',
               }}
               variant="contained"
               onClick={handleResetFilter}

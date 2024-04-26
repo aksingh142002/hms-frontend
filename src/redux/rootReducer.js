@@ -8,7 +8,7 @@ import loginReducer from './slices/loginSlice';
 import dashboardSlice from './slices/dashboardSlice';
 import symptomSlice from './slices/symptomSlice';
 import staffReducer from './slices/staffSlice';
-import roleSlice from './slices/roleSlice';
+import LeaveSlice from './slices/LeaveSlice';
 import studentSlice from './slices/studentSlice';
 import planReducer from './slices/planSlice';
 import testimonialSlice from './slices/testimonialSlice';
@@ -55,7 +55,7 @@ const rootReducer = combineReducers({
   symptom: symptomSlice,
   staff: staffReducer,
   userProfile: userProfileSlice,
-  role: roleSlice,
+  leave: LeaveSlice,
   product: persistReducer(productPersistConfig, productReducer),
   category: categorySlice,
   student: studentSlice,
