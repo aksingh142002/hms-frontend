@@ -41,13 +41,13 @@ import * as Yup from 'yup';
 import Iconify from '@components/iconify';
 import moment from 'moment/moment';
 
-LeaveForm.propTypes = {
+LeaveRequestForm.propTypes = {
   isEdit: PropTypes.bool,
   isView: PropTypes.bool,
   currentLeave: PropTypes.object,
 };
 
-export default function LeaveForm({ isEdit = false, isView = false, currentLeave }) {
+export default function LeaveRequestForm({ isEdit = false, isView = false, currentLeave }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
@@ -127,7 +127,7 @@ export default function LeaveForm({ isEdit = false, isView = false, currentLeave
 
       if (response?.payload?.success) {
         enqueueSnackbar(isEdit ? 'Leave Update successfully!' : 'Leave Created successfully!');
-        navigate(PATH_DASHBOARD.leave.list);
+        navigate(PATH_DASHBOARD.leaveRequest.list);
         reset();
       }
     } catch (error) {
@@ -137,7 +137,7 @@ export default function LeaveForm({ isEdit = false, isView = false, currentLeave
   };
 
   const handleBack = () => {
-    navigate(PATH_DASHBOARD.leave.list);
+    navigate(PATH_DASHBOARD.leaveRequest.list);
   };
 
   return (

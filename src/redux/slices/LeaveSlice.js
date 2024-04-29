@@ -1,14 +1,12 @@
 import { createSlice, isAnyOf } from '@reduxjs/toolkit';
-import { getLeaveListAsync, postLeaveCreateAsync, updateLeaveAsync, deleteLeaveAsync } from '../services';
+import { getLeaveListAsync, postLeaveCreateAsync, updateLeaveAsync, updateLeaveStatusAsync, deleteLeaveAsync } from '../services';
 
 const initialState = {
   isLoading: false,
   isSubmitting: false,
   isDeleting: false,
   totalCount: 0,
-  postLeave: [],
   allLeaveData: [],
-  updateLeaveData: [],
 };
 
 const LeaveSlice = createSlice({
@@ -25,11 +23,9 @@ const LeaveSlice = createSlice({
     });
     builder.addMatcher(isAnyOf(postLeaveCreateAsync.fulfilled), (state, { payload }) => {
       state.isLoading = false;
-      state.postLeave = payload;
     });
     builder.addMatcher(isAnyOf(postLeaveCreateAsync.rejected), (state, { payload }) => {
       state.isLoading = false;
-      state.postLeave = [];
     });
 
     // GET
@@ -39,7 +35,7 @@ const LeaveSlice = createSlice({
       builder.addMatcher(isAnyOf(getLeaveListAsync.fulfilled), (state, { payload }) => {
         state.isLoading = false;
         state.totalCount = payload?.data?.totalItems;
-        state.allLeaveData = payload?.data?.data;
+        state.allLeaveData = payload?.data?.leaveList;
       });
       builder.addMatcher(isAnyOf(getLeaveListAsync.rejected), (state, { payload }) => {
         state.isLoading = false;
@@ -52,13 +48,23 @@ const LeaveSlice = createSlice({
       });
       builder.addMatcher(isAnyOf(updateLeaveAsync.fulfilled), (state, { payload }) => {
         state.isSubmitting = false;
-        state.updateLeaveData = payload;
       });
       builder.addMatcher(isAnyOf(updateLeaveAsync.rejected), (state, { payload }) => {
         state.isSubmitting = false;
-        state.updateLeaveData = [];
       });
   
+        
+    // PUT Status
+    builder.addMatcher(isAnyOf(updateLeaveStatusAsync.pending), (state, { payload }) => {
+      state.isSubmitting = true;
+    });
+    builder.addMatcher(isAnyOf(updateLeaveStatusAsync.fulfilled), (state, { payload }) => {
+      state.isSubmitting = false;
+    });
+    builder.addMatcher(isAnyOf(updateLeaveStatusAsync.rejected), (state, { payload }) => {
+      state.isSubmitting = false;
+    });
+
       // DELETE
       builder.addMatcher(isAnyOf(deleteLeaveAsync.pending), (state, { payload }) => {
         state.isDeleting = true;

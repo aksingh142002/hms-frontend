@@ -284,13 +284,23 @@ export default function StaffForm({ isEdit = false, isView = false, currentStaff
 
               {isView ? (
                 <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-                  <LoadingButton onClick={handleBack} type="button" variant="contained">
+                  <LoadingButton
+                    onClick={handleBack}
+                    type="button"
+                    variant="contained"
+                    sx={{ color: 'white' }}
+                  >
                     Back
                   </LoadingButton>
                 </Stack>
               ) : (
                 <Stack gap="10px" justifyContent="flex-end" flexDirection="row" sx={{ mt: 3 }}>
-                  <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+                  <LoadingButton
+                    type="submit"
+                    variant="contained"
+                    loading={isSubmitting}
+                    sx={{ color: 'white' }}
+                  >
                     {!isEdit ? 'Create Staff' : 'Save Changes'}
                   </LoadingButton>
 

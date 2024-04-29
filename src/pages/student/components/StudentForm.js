@@ -44,7 +44,13 @@ export default function StudentForm({ isEdit = false, isView = false, currentStu
   };
   const allDepartmentData = ['School of Science', 'School of Engineering', 'School of Management'];
   const allCourseData = ['BTech', 'BBA', 'BSC', 'MTech', 'MBA', 'MSC', 'Diploma'];
-  const allBranchData = ['Computer Science Engineering', 'Civil Engineering', 'Electrical Engineering', 'Mechanical Engineering', 'Metallurgical Engineering']
+  const allBranchData = [
+    'Computer Science Engineering',
+    'Civil Engineering',
+    'Electrical Engineering',
+    'Mechanical Engineering',
+    'Metallurgical Engineering',
+  ];
   // const { allDepartmentData } = useSelector((store) => store?.role);
   const { isLoading } = useSelector((store) => store?.student);
 
@@ -325,13 +331,23 @@ export default function StudentForm({ isEdit = false, isView = false, currentStu
               </Box>
               {isView ? (
                 <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-                  <LoadingButton onClick={handleBack} type="button" variant="contained">
+                  <LoadingButton
+                    onClick={handleBack}
+                    type="button"
+                    variant="contained"
+                    sx={{ color: 'white' }}
+                  >
                     Back
                   </LoadingButton>
                 </Stack>
               ) : (
                 <Stack gap="10px" justifyContent="flex-end" flexDirection="row" sx={{ mt: 3 }}>
-                  <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+                  <LoadingButton
+                    type="submit"
+                    variant="contained"
+                    loading={isSubmitting}
+                    sx={{ color: 'white' }}
+                  >
                     {!isEdit ? 'Create Student' : 'Save Changes'}
                   </LoadingButton>
 

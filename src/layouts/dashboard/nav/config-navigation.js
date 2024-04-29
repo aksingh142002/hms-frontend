@@ -67,6 +67,11 @@ const navConfig = [
         path: PATH_DASHBOARD.leave.root,
         icon: ICONS.leave,
       },
+      {
+        title: 'Leave Request',
+        path: PATH_DASHBOARD.leaveRequest.root,
+        icon: ICONS.leave,
+      },
       // {
       //   title: 'Service',
       //   path: PATH_DASHBOARD.services.root,

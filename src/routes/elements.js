@@ -23,6 +23,10 @@ export const StaffList = Loadable(lazy(() => import('@pages/Staff/page/StaffList
 export const Staff = Loadable(lazy(() => import('@pages/Staff/page/Staff')));
 export const LeaveList = Loadable(lazy(() => import('@pages/Leave/pages/LeaveList')));
 export const Leave = Loadable(lazy(() => import('@pages/Leave/pages/Leave')));
+export const LeaveRequestList = Loadable(
+  lazy(() => import('@pages/leaveRequest/pages/LeaveRequestList'))
+);
+export const LeaveRequest = Loadable(lazy(() => import('@pages/leaveRequest/pages/LeaveRequest')));
 // export const RoleList = Loadable(lazy(() => import('@pages/masters/role/pages/RoleList')));
 // export const Role = Loadable(lazy(() => import('@pages/masters/role/pages/Role')));
 // export const PermissionsList = Loadable(

@@ -6,7 +6,7 @@ export const getLeaveListAsync = createAsyncThunk(
   async (params, toolkit) =>
     AxiosClient({
       toolkit,
-      url: '/list-leave',
+      url: '/leave/list-leave',
       method: 'get',
       params,
     })
@@ -15,7 +15,7 @@ export const getLeaveListAsync = createAsyncThunk(
 export const postLeaveCreateAsync = createAsyncThunk('leave/addLeaveAsync', async (data, toolkit) =>
   AxiosClient({
     toolkit,
-    url: '/create-leave',
+    url: '/leave/create-leave',
     method: 'post',
     data,
   })
@@ -26,16 +26,26 @@ export const updateLeaveAsync = createAsyncThunk(
   async ({ id, data }, toolkit) =>
     AxiosClient({
       toolkit,
-      url: `/update-leave/${id}`,
+      url: `/leave/update-leave/${id}`,
       method: 'put',
       data,
     })
 );
 
+export const updateLeaveStatusAsync = createAsyncThunk(
+  'leave/updateLeaveStatusAsync',
+  async ({ id, data }, toolkit) =>
+    AxiosClient({
+      toolkit,
+      url: `/leave/update-leave-status/${id}`,
+      method: 'put',
+      data,
+    })
+);
 export const deleteLeaveAsync = createAsyncThunk('leave/deleteLeaveAsync', async (id, toolkit) =>
   AxiosClient({
     toolkit,
-    url: `/delete-leave/${id}`,
+    url: `/leave/delete-leave/${id}`,
     method: 'delete',
   })
 );

@@ -23,22 +23,24 @@ import {
   getStaffListAsync,
 } from '@redux/services';
 import { useDispatch, useSelector } from 'react-redux';
-import { LeaveTableRow, LeaveTableToolbar } from '../components';
+import { LeaveRequestTableRow, LeaveRequestTableToolbar } from '../components';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'action', label: 'Action', align: 'left' },
   { id: 'Sr. No', label: 'Sr. No', align: 'left' },
-  { id: 'staff', label: 'Staff', align: 'left' },
-  { id: 'role', label: 'Role', align: 'left' },
+  { id: 'student', label: 'Student', align: 'left' },
+  { id: 'email', label: 'Email', align: 'left' },
   { id: 'startDate', label: 'Start Date', align: 'left' },
   { id: 'endDate', label: 'End Date', align: 'left' },
+  { id: 'status', label: 'Status', align: 'left' },
+  { id: 'reason', label: 'Reason for Leave', align: 'left' },
 ];
 
 const limit = localStorage.getItem('table-rows-per-page') ?? 10;
 const DEFAULT_QUERY = { page: 1, limit: Number(limit) };
 
-export default function LeaveList() {
+export default function LeaveRequestList() {
   const {
     dense,
     order,
@@ -131,11 +133,11 @@ export default function LeaveList() {
   };
 
   const handleEditRow = (row) => {
-    navigate(PATH_DASHBOARD.leave.edit(row?._id), { state: row });
+    navigate(PATH_DASHBOARD.leaveRequest.edit(row?._id), { state: row });
   };
 
   const handleViewRow = (row) => {
-    navigate(PATH_DASHBOARD.leave.view(row?._id), { state: row });
+    navigate(PATH_DASHBOARD.leaveRequest.view(row?._id), { state: row });
   };
 
   const handlePageChange = (event, newPage) => {
@@ -144,46 +146,43 @@ export default function LeaveList() {
       return { ...p };
     });
   };
-  // useEffect(() => {
-  //   // dispatch(getStaffDocOrNutrAsync());
-  //   dispatch(getStaffListAsync());
-  // }, [dispatch]);
+  
   useEffect(() => {
     dispatch(getLeaveListAsync(query));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, query]);
+  }, []);
 
   return (
     <>
       <Helmet>
-        <title> Leave: List | VHAI </title>
+        <title> Leave Request: List | VHAI </title>
       </Helmet>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Leave List"
+          heading="Leave Request List"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Leave', href: PATH_DASHBOARD.leave.list },
+            { name: 'Leave Requests', href: PATH_DASHBOARD.leaveRequest.list },
             { name: 'List' },
           ]}
-          action={
-            <Button
-              sx={{ color: 'white' }}
-              component={RouterLink}
-              to={PATH_DASHBOARD.leave.new}
-              variant="contained"
-              startIcon={<Iconify icon="eva:plus-fill" />}
-              // disabled={!modulePermit.create}
-            >
-              New Leave
-            </Button>
-          }
+          // action={
+          //   <Button
+          //     sx={{ color: 'white' }}
+          //     component={RouterLink}
+          //     to={PATH_DASHBOARD.leave.new}
+          //     variant="contained"
+          //     startIcon={<Iconify icon="eva:plus-fill" />}
+          //     // disabled={!modulePermit.create}
+          //   >
+          //     New Leave
+          //   </Button>
+          // }
         />
 
         <Card>
           <Divider />
-          <LeaveTableToolbar
+          <LeaveRequestTableToolbar
             filterSearch={search}
             onFilterSearch={handleFilterSearch}
             onFilterName={handleFilterName}
@@ -213,7 +212,7 @@ export default function LeaveList() {
                 <TableBody>
                   {isLoading ||
                     allLeaveData.map((row, index) => (
-                      <LeaveTableRow
+                      <LeaveRequestTableRow
                         key={row._id}
                         row={row}
                         index={index}
