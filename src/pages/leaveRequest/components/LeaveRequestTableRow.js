@@ -33,7 +33,7 @@ LeaveRequestTableRow.propTypes = {
   onSelectRow: PropTypes.func,
   query: PropTypes.object,
   index: PropTypes.number,
-  modulePermit: PropTypes.object,
+  // modulePermit: PropTypes.object,
 };
 
 export default function LeaveRequestTableRow({
@@ -45,7 +45,7 @@ export default function LeaveRequestTableRow({
   onDeleteRow,
   index,
   query,
-  modulePermit,
+  // modulePermit,
 }) {
   const { studentId, status, startDate, endDate, reason } = row;
 

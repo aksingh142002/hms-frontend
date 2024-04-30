@@ -24,14 +24,8 @@ import {
   Stack,
 } from '@mui/material';
 import Label from '@components/label';
-import {
-  postLeaveCreateAsync,
-  updateLeaveAsync,
-  getStaffListAsync,
-  getStaffDocOrNutrAsync,
-} from '@redux/services';
+import { postLeaveCreateAsync, updateLeaveAsync } from '@redux/services';
 import { PATH_DASHBOARD } from '@routes/paths';
-import { generateDateFromTo, addDaysToDate, get30DateFromTodate } from '@utils/generateDateFromTo';
 import PropTypes from 'prop-types';
 import { useEffect, useMemo, useState, Fragment } from 'react';
 import { useForm, Controller } from 'react-hook-form';
@@ -256,7 +250,12 @@ export default function LeaveForm({ isEdit = false, isView = false, currentLeave
 
               {isView ? (
                 <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-                  <LoadingButton onClick={handleBack} type="button" variant="contained" sx={{color: 'white'}}>
+                  <LoadingButton
+                    onClick={handleBack}
+                    type="button"
+                    variant="contained"
+                    sx={{ color: 'white' }}
+                  >
                     Back
                   </LoadingButton>
                 </Stack>

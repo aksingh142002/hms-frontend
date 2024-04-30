@@ -133,6 +133,10 @@ export default function StudentForm({ isEdit = false, isView = false, currentStu
   const departmentType = watch('department');
   const values = getValues();
 
+  const courseValue = watch('course');
+
+  // Render the Branch field only if the course is BTech
+  const renderBranchField = courseValue === 'BTech';
   const [selectedValues, setSelectedValues] = useState([]);
 
   const handleChange = (event, newValue) => {
@@ -315,16 +319,18 @@ export default function StudentForm({ isEdit = false, isView = false, currentStu
                   }
                   isOptionEqualToValue={(option, value) => option === value}
                 />
-                <RHFAutocomplete
-                  disabled={isView}
-                  name="branch"
-                  label="Branch"
-                  options={allBranchData}
-                  getOptionLabel={(option) =>
-                    option && option ? option.replace(/\b\w/g, (char) => char.toUpperCase()) : ''
-                  }
-                  isOptionEqualToValue={(option, value) => option === value}
-                />
+                {renderBranchField && (
+                  <RHFAutocomplete
+                    disabled={isView}
+                    name="branch"
+                    label="Branch"
+                    options={allBranchData}
+                    getOptionLabel={(option) =>
+                      option && option ? option.replace(/\b\w/g, (char) => char.toUpperCase()) : ''
+                    }
+                    isOptionEqualToValue={(option, value) => option === value}
+                  />
+                )}
                 <RHFTextField disabled={isView} name="rollNumber" label="University Roll Number" />
                 <RHFTextField disabled={isView} name="batch" label="Batch" />
                 <RHFTextField disabled={isView} name="address" label="Address" />

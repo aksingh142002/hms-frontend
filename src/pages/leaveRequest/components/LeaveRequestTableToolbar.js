@@ -7,9 +7,9 @@ LeaveTableToolbar.propTypes = {
   onFilterName: PropTypes.func,
   onResetFilter: PropTypes.func,
   onFilterSearch: PropTypes.func,
-  staffData: PropTypes.array,
-  staff: PropTypes.object,
-  onStaffChange: PropTypes.func,
+  statusData: PropTypes.array,
+  status: PropTypes.object,
+  onStatusChange: PropTypes.func,
   startDate: PropTypes.instanceOf(Date),
   onStartDateChange: PropTypes.func,
   endDate: PropTypes.instanceOf(Date),
@@ -21,16 +21,16 @@ export default function LeaveTableToolbar({
   onFilterName,
   onResetFilter,
   onFilterSearch,
-  staffData,
-  staff,
-  onStaffChange,
+  statusData,
+  status,
+  onStatusChange,
   startDate,
   onStartDateChange,
   endDate,
   onEndDateChange,
 }) {
-  const handleStaffChange = (event, value) => {
-    onStaffChange(value);
+  const handleStatusChange = (event, value) => {
+    onStatusChange(value);
   };
 
   const StandardDateTime = (date) => {
@@ -48,7 +48,7 @@ export default function LeaveTableToolbar({
   };
   const handleResetFilter = () => {
     onResetFilter();
-    onStaffChange(null); // Clear the selected staff
+    onStatusChange(null); // Clear the selected status
     onStartDateChange(null); // Clear the start date
     onEndDateChange(null); // Clear the end date
   };
@@ -57,17 +57,15 @@ export default function LeaveTableToolbar({
       <Grid container spacing={2} alignItems="center">
         <Grid item xs={12} sm={3}>
           <Autocomplete
-            options={staffData}
-            value={staff}
-            onChange={handleStaffChange}
+            options={statusData}
+            value={status}
+            onChange={handleStatusChange}
             getOptionLabel={(option) =>
-              option && option.name
-                ? `${option.name.replace(/\b\w/g, (char) =>
-                    char.toUpperCase()
-                  )} (${option.role.roleName.replace(/\b\w/g, (char) => char.toUpperCase())})`
-                : ''
+              `${option.replace(/\b\w/g, (char) =>
+                char.toUpperCase()
+              )}`
             }
-            renderInput={(params) => <TextField {...params} label="Staff" size="medium" />}
+            renderInput={(params) => <TextField {...params} label="Status" size="medium" />}
           />
         </Grid>
 

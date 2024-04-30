@@ -12,6 +12,17 @@ export const getLeaveListAsync = createAsyncThunk(
     })
 );
 
+export const getLeaveListByStudentIdAsync = createAsyncThunk(
+  'leave/getLeaveListByStudentIdAsync',
+  async ({id, params}, toolkit) =>
+    AxiosClient({
+      toolkit,
+      url: `/leave/list-leave-by-studentId/${id}`,
+      method: 'get',
+      params
+    })
+);
+
 export const postLeaveCreateAsync = createAsyncThunk('leave/addLeaveAsync', async (data, toolkit) =>
   AxiosClient({
     toolkit,

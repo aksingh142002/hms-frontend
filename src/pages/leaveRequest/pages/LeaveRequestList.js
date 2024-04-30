@@ -60,16 +60,14 @@ export default function LeaveRequestList() {
   const { enqueueSnackbar } = useSnackbar();
 
   const navigate = useNavigate();
-  const { staffDocOrNut, staffData } = useSelector((store) => store?.staff);
-
+  const statusArray= ['pending', 'approved', 'rejected'];
   const { isLoading, allLeaveData, totalCount } = useSelector((store) => store?.leave);
-  const { modulePermit } = useSelector((store) => store?.menupermission);
 
   const dispatch = useDispatch();
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [search, setSearch] = useState('');
-  const [staff, setStaff] = useState(null);
+  const [status, setStatus] = useState(null);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
@@ -90,16 +88,16 @@ export default function LeaveRequestList() {
   };
 
   const handleFilterSearch = () => {
-    if (startDate || staff) {
-      const updatedQuery = { ...query, page: 1, staffId: staff?._id, startDate, endDate };
+    if (startDate || status) {
+      const updatedQuery = { ...query, page: 1, status, startDate, endDate };
       setQuery(updatedQuery);
     }
   };
 
   const handleResetFilter = () => {
-    if (startDate || staff) {
+    if (startDate || status) {
       setSearch('');
-      const updatedQuery = { ...query, page: 1, staffId: '', startDate: null, endDate: null };
+      const updatedQuery = { ...query, page: 1, status: '', startDate: null, endDate: null };
       setQuery(updatedQuery);
     }
   };
@@ -149,8 +147,7 @@ export default function LeaveRequestList() {
   
   useEffect(() => {
     dispatch(getLeaveListAsync(query));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dispatch, query]);
 
   return (
     <>
@@ -187,11 +184,9 @@ export default function LeaveRequestList() {
             onFilterSearch={handleFilterSearch}
             onFilterName={handleFilterName}
             onResetFilter={handleResetFilter}
-            staffData={staffData?.filter(
-              (item) => item?.role.roleName?.trim()?.toLowerCase() !== 'super admin'
-            )}
-            staff={staff}
-            onStaffChange={setStaff}
+            statusData={statusArray}
+            status={status}
+            onStatusChange={setStatus}
             startDate={startDate}
             onStartDateChange={setStartDate}
             endDate={endDate}
@@ -222,7 +217,7 @@ export default function LeaveRequestList() {
                         onDeleteRow={(closeModal) => handleDeleteRow(row, closeModal)}
                         onEditRow={() => handleEditRow(row)}
                         onViewRow={() => handleViewRow(row)}
-                        modulePermit={modulePermit}
+                        // modulePermit={modulePermit}
                       />
                     ))}
 

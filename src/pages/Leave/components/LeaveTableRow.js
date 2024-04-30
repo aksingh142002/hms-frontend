@@ -13,6 +13,7 @@ import {
 // components
 import ConfirmDialog from '@components/confirm-dialog';
 import Iconify from '@components/iconify';
+import Label from '@components/label';
 import MenuPopover from '@components/menu-popover';
 import { useSelector } from 'react-redux';
 import { LoadingButton } from '@mui/lab';
@@ -29,7 +30,7 @@ LeaveTableRow.propTypes = {
   onSelectRow: PropTypes.func,
   query: PropTypes.object,
   index: PropTypes.number,
-  modulePermit: PropTypes.object,
+  // modulePermit: PropTypes.object,
 };
 
 export default function LeaveTableRow({
@@ -41,9 +42,9 @@ export default function LeaveTableRow({
   onDeleteRow,
   index,
   query,
-  modulePermit,
+  // modulePermit,
 }) {
-  const { staffId, staffType, startDate, endDate, schedules } = row;
+  const { status, startDate, endDate, reason, comments } = row;
 
   const { page, limit } = query;
 
@@ -82,26 +83,44 @@ export default function LeaveTableRow({
             {(page - 1) * limit + (index + 1)}
           </Typography>
         </TableCell>
-        <TableCell>
+        {/* <TableCell>
           <Typography variant="subtitle2" noWrap>
             {staffId?.name}
           </Typography>
-        </TableCell>
-        <TableCell>
+        </TableCell> */}
+        {/* <TableCell>
           <Typography variant="subtitle2" sx={{ textTransform: 'capitalize' }}>
             {staffType}
           </Typography>
-        </TableCell>
+        </TableCell> */}
 
         <TableCell align="left">
-          <Typography variant="subtitle2">{moment(startDate)?.format('DD MMMM YYYY') || 'N/A'}</Typography>
+          <Typography variant="subtitle2">
+            {moment(startDate)?.format('DD MMMM YYYY') || 'N/A'}
+          </Typography>
         </TableCell>
         <TableCell align="left">
-          <Typography variant="subtitle2">{moment(endDate)?.format('DD MMMM YYYY') || 'N/A'}</Typography>
+          <Typography variant="subtitle2">
+            {moment(endDate)?.format('DD MMMM YYYY') || 'N/A'}
+          </Typography>
         </TableCell>
-        {/* <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-          {role?.roleName || '-'}
-        </TableCell> */}
+        <TableCell align="left">
+          <Label
+            variant="soft"
+            color={
+              (status === 'rejected' && 'error') || (status === 'pending' && 'warning') || 'success'
+            }
+            sx={{ textTransform: 'capitalize' }}
+          >
+            {status}
+          </Label>
+        </TableCell>
+        <TableCell>
+          <Typography variant="subtitle2">{reason}</Typography>
+        </TableCell>
+        <TableCell>
+          <Typography variant="subtitle2">{comments}</Typography>
+        </TableCell>
       </TableRow>
 
       <MenuPopover
@@ -125,22 +144,10 @@ export default function LeaveTableRow({
             onEditRow();
             handleClosePopover();
           }}
-          disabled={!modulePermit.edit}
+          disabled={status!=='pending'}
         >
           <Iconify icon="eva:edit-fill" />
           Edit
-        </MenuItem>
-
-        <MenuItem
-          onClick={() => {
-            handleOpenConfirm();
-            handleClosePopover();
-          }}
-          sx={{ color: 'error.main' }}
-          disabled={!modulePermit.delete}
-        >
-          <Iconify icon="eva:trash-2-outline" />
-          Delete
         </MenuItem>
       </MenuPopover>
 

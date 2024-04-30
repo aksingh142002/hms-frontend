@@ -18,7 +18,7 @@ import {
 } from '@components/table';
 import {
   deleteLeaveAsync,
-  getLeaveListAsync,
+  getLeaveListByStudentIdAsync,
   getStaffDocOrNutrAsync,
   getStaffListAsync,
 } from '@redux/services';
@@ -29,13 +29,15 @@ import { LeaveTableRow, LeaveTableToolbar } from '../components';
 const TABLE_HEAD = [
   { id: 'action', label: 'Action', align: 'left' },
   { id: 'Sr. No', label: 'Sr. No', align: 'left' },
-  { id: 'staff', label: 'Staff', align: 'left' },
-  { id: 'role', label: 'Role', align: 'left' },
   { id: 'startDate', label: 'Start Date', align: 'left' },
   { id: 'endDate', label: 'End Date', align: 'left' },
+  { id: 'status', label: 'Status', align: 'left' },
+  { id: 'reason', label: 'Reason for Leave', align: 'left' },
+  { id: 'comment', label: 'Comments', align: 'left' },
 ];
 
 const limit = localStorage.getItem('table-rows-per-page') ?? 10;
+const user = JSON.parse(localStorage.getItem('userData'));
 const DEFAULT_QUERY = { page: 1, limit: Number(limit) };
 
 export default function LeaveList() {
@@ -58,16 +60,15 @@ export default function LeaveList() {
   const { enqueueSnackbar } = useSnackbar();
 
   const navigate = useNavigate();
-  const { staffDocOrNut, staffData } = useSelector((store) => store?.staff);
 
-  const { isLoading, allLeaveData, totalCount } = useSelector((store) => store?.leave);
-  const { modulePermit } = useSelector((store) => store?.menupermission);
+  const statusArray= ['pending', 'approved', 'rejected'];
+  const { isLoading, LeaveByStudentId, totalCount } = useSelector((store) => store?.leave);
 
   const dispatch = useDispatch();
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [search, setSearch] = useState('');
-  const [staff, setStaff] = useState(null);
+  const [status, setStatus] = useState(null);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
@@ -88,16 +89,16 @@ export default function LeaveList() {
   };
 
   const handleFilterSearch = () => {
-    if (startDate || staff) {
-      const updatedQuery = { ...query, page: 1, staffId: staff?._id, startDate, endDate };
+    if (startDate || status) {
+      const updatedQuery = { ...query, page: 1, status, startDate, endDate };
       setQuery(updatedQuery);
     }
   };
 
   const handleResetFilter = () => {
-    if (startDate || staff) {
+    if (startDate || status) {
       setSearch('');
-      const updatedQuery = { ...query, page: 1, staffId: '', startDate: null, endDate: null };
+      const updatedQuery = { ...query, page: 1, status: '', startDate: null, endDate: null };
       setQuery(updatedQuery);
     }
   };
@@ -106,13 +107,13 @@ export default function LeaveList() {
     const response = await dispatch(deleteLeaveAsync(row?._id));
 
     if (response?.payload?.success) {
-      if (allLeaveData?.length === 1 && query?.page > 1) {
+      if (LeaveByStudentId?.length === 1 && query?.page > 1) {
         setQuery((p) => {
           p.page -= 1;
           return { ...p };
         });
       } else {
-        dispatch(getLeaveListAsync(query));
+        dispatch(getLeaveListByStudentIdAsync({ id: user?._id, params: query }));
       }
       closeModal();
       enqueueSnackbar(response?.payload?.message);
@@ -149,7 +150,7 @@ export default function LeaveList() {
   //   dispatch(getStaffListAsync());
   // }, [dispatch]);
   useEffect(() => {
-    dispatch(getLeaveListAsync(query));
+    dispatch(getLeaveListByStudentIdAsync({ id: user?._id, params: query }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, query]);
 
@@ -184,15 +185,13 @@ export default function LeaveList() {
         <Card>
           <Divider />
           <LeaveTableToolbar
-            filterSearch={search}
+           filterSearch={search}
             onFilterSearch={handleFilterSearch}
             onFilterName={handleFilterName}
             onResetFilter={handleResetFilter}
-            staffData={staffData?.filter(
-              (item) => item?.role.roleName?.trim()?.toLowerCase() !== 'super admin'
-            )}
-            staff={staff}
-            onStaffChange={setStaff}
+            statusData={statusArray}
+            status={status}
+            onStatusChange={setStatus}
             startDate={startDate}
             onStartDateChange={setStartDate}
             endDate={endDate}
@@ -205,14 +204,14 @@ export default function LeaveList() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={allLeaveData?.length}
+                  rowCount={LeaveByStudentId?.length}
                   numSelected={selected.length}
                   // onSort={onSort}
                 />
 
                 <TableBody>
                   {isLoading ||
-                    allLeaveData.map((row, index) => (
+                    LeaveByStudentId.map((row, index) => (
                       <LeaveTableRow
                         key={row._id}
                         row={row}
@@ -223,11 +222,10 @@ export default function LeaveList() {
                         onDeleteRow={(closeModal) => handleDeleteRow(row, closeModal)}
                         onEditRow={() => handleEditRow(row)}
                         onViewRow={() => handleViewRow(row)}
-                        modulePermit={modulePermit}
                       />
                     ))}
 
-                  <TableNoData isNotFound={allLeaveData?.length} isLoading={isLoading} />
+                  <TableNoData isNotFound={LeaveByStudentId?.length} isLoading={isLoading} />
                 </TableBody>
               </Table>
             </Scrollbar>
