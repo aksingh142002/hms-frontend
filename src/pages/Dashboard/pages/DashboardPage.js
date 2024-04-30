@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSettingsContext } from '@components/settings';
 import { getDashboardAsync } from '@redux/services';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppointmentCard, CustomCard, UserTableCard } from '../components';
+import {  CustomCard } from '../components';
 
 export default function DashboardPage() {
   const dispatch = useDispatch();
