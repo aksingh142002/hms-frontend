@@ -47,7 +47,7 @@ export default function LeaveForm({ isEdit = false, isView = false, currentLeave
   const { enqueueSnackbar } = useSnackbar();
 
   const user = JSON.parse(localStorage.getItem('userData'));
-  console.log('user', user);
+
   const { staffDocOrNut, staffData } = useSelector((store) => store?.staff);
   const { isLoading } = useSelector((store) => store?.leave);
 

@@ -53,13 +53,7 @@ export default function LeaveRequestForm({ isEdit = false, isView = false, curre
   const { enqueueSnackbar } = useSnackbar();
 
   const user = JSON.parse(localStorage.getItem('userData'));
-  console.log('user', user);
-  const { staffDocOrNut, staffData } = useSelector((store) => store?.staff);
   const { isLoading } = useSelector((store) => store?.leave);
-
-  const [daysTotal, setDaysTotal] = useState([]);
-  const [selectAll, setSelectAll] = useState(false);
-  const [copyToAll, setCopyToAll] = useState(false);
 
   const LeaveSchema = Yup.object().shape({
     startDate: Yup.string().required('Start Date is required.'),
@@ -256,7 +250,12 @@ export default function LeaveRequestForm({ isEdit = false, isView = false, curre
 
               {isView ? (
                 <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-                  <LoadingButton onClick={handleBack} type="button" variant="contained" sx={{color: 'white'}}>
+                  <LoadingButton
+                    onClick={handleBack}
+                    type="button"
+                    variant="contained"
+                    sx={{ color: 'white' }}
+                  >
                     Back
                   </LoadingButton>
                 </Stack>

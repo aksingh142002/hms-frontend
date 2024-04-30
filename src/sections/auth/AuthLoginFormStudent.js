@@ -54,7 +54,6 @@ export default function AuthLoginFormStudent() {
     const response = await dispatch(postStudentLoginAsync(payloadData));
 
       if (response?.payload?.success) {
-        console.log('response', response?.payload?.data?.accessToken)
         localStorage.setItem('token', response?.payload?.data?.accessToken);
         // const res = await dispatch(getPermissionByIdAsync(response?.payload?.data?.staff?.role?._id));
         // if (res?.payload?.success) {

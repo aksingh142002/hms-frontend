@@ -71,8 +71,6 @@ export default function StaffTableRow({
     setOpenPopover(null);
   };
 
-  console.log('lastLogin');
-
   return (
     <>
       <TableRow hover selected={selected}>

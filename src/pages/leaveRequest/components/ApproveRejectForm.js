@@ -20,7 +20,7 @@ ApproveRejectForm.propTypes = {
 export default function ApproveRejectForm({ id, status, handleCloseEdit }) {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
-  console.log('status', status)
+
   const ApproveRejectSchema = Yup.object().shape({
     comments: Yup.string(),
   });

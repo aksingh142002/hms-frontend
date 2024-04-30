@@ -12,10 +12,8 @@ import { StaffForm } from '../components';
 export default function StaffCreatePage() {
   const { themeStretch } = useSettingsContext();
   const dispatch = useDispatch();
-  const { staffById } = useSelector((state) => state?.staff);
   const { id } = useParams();
   const { pathname = '', state } = useLocation();
-  console.log('state', state)
   const editView = useMemo(() => {
     if (id && /edit/i?.test(pathname)) {
       return {

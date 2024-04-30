@@ -12,10 +12,9 @@ import { StudentForm } from '../components';
 export default function StudentCreatePage() {
   const { themeStretch } = useSettingsContext();
   const dispatch = useDispatch();
-  const { studentById } = useSelector((state) => state?.student);
   const { id } = useParams();
   const { pathname = '', state } = useLocation();
-  console.log('state', state)
+
   const editView = useMemo(() => {
     if (id && /edit/i?.test(pathname)) {
       return {
