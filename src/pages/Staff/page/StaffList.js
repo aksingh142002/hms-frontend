@@ -33,6 +33,7 @@ const TABLE_HEAD = [
 
 const limit = localStorage.getItem('table-rows-per-page') ?? 10;
 const DEFAULT_QUERY = { page: 1, limit: Number(limit) };
+const user = JSON.parse(localStorage.getItem('userData'));
 
 export default function StaffList() {
   const {
@@ -56,7 +57,6 @@ export default function StaffList() {
 
   const { isLoading, staffData, totalCount } = useSelector((store) => store?.staff);
   const { modulePermit } = useSelector((store) => store?.menupermission);
-  // const { allRoleData } = useSelector((store) => store?.role);
   const allRoleData = [
     { _id: 1, roleName: 'hostel staff' },
     { _id: 2, roleName: 'admin' },
@@ -166,7 +166,7 @@ export default function StaffList() {
               to={PATH_DASHBOARD.staff.new}
               variant="contained"
               startIcon={<Iconify icon="eva:plus-fill" />}
-              // disabled={!modulePermit.create}
+              disabled={user?.role !== 'admin'}
             >
               New Staff
             </Button>
